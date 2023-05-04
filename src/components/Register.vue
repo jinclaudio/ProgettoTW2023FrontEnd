@@ -1,68 +1,68 @@
 <template>
-  <div class="login-container">
-  <el-form label-width="120px">
+  <div class="register-container">
+    <el-form label-width="120px">
       <el-form-item label="Username">
         <el-input v-model="username" placeholder="Inserisci il nome utente" />
       </el-form-item>
       <el-form-item label="Password">
         <el-input v-model="password" placeholder="inserisci la password"/>
       </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="login">Login</el-button>
-        <el-button>Register</el-button>
+      <el-form-item label="UserType" prop="region">
+        <el-select v-model="UserType" placeholder="il tipo di utente">
+          <el-option label="Utente normale" value="Normal" />
+          <el-option label="Manager" value="Manager" />
+        </el-select>
+      </el-form-item>
+
+        <el-form-item>
+        <el-button @click="register">Register</el-button>
       </el-form-item>
     </el-form>
   </div>
-  </template>
+</template>
 
-<script lang="ts">
+<script>
+
 import {defineComponent, ref} from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
 
 export default defineComponent({
-  name: 'Login',
+  name: 'Register',
   setup() {
 
     const username = ref('');
     const password = ref('');
+    const UserType = ref('');
     const error = ref('');
 
     const router = useRouter();
-    async function login() {
+    async function register() {
       try {
-        const response = await axios.post('http://127.0.0.1:3000/users/login', {
+        const response = await axios.post('http://127.0.0.1:3000/users/regUser', {
           username: username.value,
           password: password.value,
         });
         console.log(response.data);
       } catch (e) {
-        error.value = e.response?.data?.message || 'Login failed';
+        error.value = e.response?.data?.message || 'Register failed';
       }
-    };
-
-
-
+    }
 
     return {
       username,
       password,
+      UserType,
       error,
-      login,
-
+      register,
     };
   },
 });
+
+
 </script>
 
 <style scoped>
-.login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  /*background-color: cornflowerblue;*/
-}
 
 </style>
