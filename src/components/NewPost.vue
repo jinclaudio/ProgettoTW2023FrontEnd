@@ -5,7 +5,7 @@ import axios from "axios";
 const text = ref('');
 
 async function postASqueal() {
-  await axios.post('http://127.0.0.1:3000/users/squeal', {
+  axios.post('http://127.0.0.1:3000/users/squeal', {
     username: "Logged User",
     text: text,
     category: "general"
