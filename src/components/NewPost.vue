@@ -7,7 +7,7 @@ let text = ref<string>('');
 async function postASqueal() {
   axios.post('http://127.0.0.1:3000/users/squeal', {
     username: "keqing",
-    text: text,
+    text: text.value,
     category: "general"
   })
       .then((response) => {
