@@ -4,7 +4,7 @@
             <v-col cols="12" sm="8" md="12" lg-="4">
                 <v-card>
                     <v-card-title class="justify-center">
-                        <h2>Resgistrazione</h2>
+                        <h2>Login</h2>
                     </v-card-title>
                     <v-card-text>
                         <v-form @submit="login">
