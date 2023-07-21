@@ -15,12 +15,12 @@ defineProps({
 
 <template>
     <v-card
-        class="mx-auto"
-        color="#26c6da"
-        theme="dark"
-        max-width="400"
-        prepend-icon="mdi-twitter"
+        class="mx-auto pb-4 border-2"
+        color=""
+        theme="light"
+        max-width="auto"
         title="Squeal"
+
     >
         <template v-slot:prepend>
             <v-icon size="x-large"></v-icon>
@@ -55,6 +55,7 @@ defineProps({
             </v-list-item>
         </v-card-actions>
     </v-card>
+  <v-spacer></v-spacer>
 </template>
 
 <style scoped>
