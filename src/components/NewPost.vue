@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import {ref,computed} from 'vue'
+import {ref} from 'vue'
 import axios from "axios";
-import {valueEquals} from "element-plus";
+
 
 let text = ref<string>('');
-let num = ref<number>('');
-let prevText = ref<number>('')
-let difference = ref<number>('')
-
+let num = ref<number>(0);
+let prevText = ref<number>(0)
+let difference = ref<number>(0)
+let disable = ref<boolean>(false)
 
 
 async function postASqueal() {
@@ -40,9 +40,8 @@ getChar()
 
   async function updateNum  (){
     difference = text.value.length - prevText
-
     num -= difference
-
+    disable=(num < 0)
     prevText=text.value.length
 }
 </script>
@@ -59,9 +58,8 @@ getChar()
   >
   </v-textarea>
 
-
   <v-banner :text="num"></v-banner>
-  <v-btn @click="postASqueal">Squeal it</v-btn>
+  <v-btn @click="postASqueal" :disabled="disable">Squeal it</v-btn>
 </template>
 
 <style scoped>
