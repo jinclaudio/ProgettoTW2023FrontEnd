@@ -39,23 +39,24 @@ import axios from 'axios';
 import {useRouter} from 'vue-router';
 
 
-const username = ref('');
-const password = ref('');
+const username = ref('abc');
+const password = ref('efg');
 const UserType = ref('');
 const error = ref('');
 
 const router = useRouter();
 
 async function register() {
-    try {
-        const response = await axios.post('http://127.0.0.1:3000/users/regUser', {
+
+  axios.post('http://127.0.0.1:3000/users/regUser', {
             username: username.value,
             password: password.value,
-        });
-        console.log(response.data);
-    } catch (e) {
-        error.value = e.response?.data?.message || 'Register failed';
-    }
+        })
+      .then(res=>{
+        console.log(res)
+      });
+
+
 }
 
 </script>
