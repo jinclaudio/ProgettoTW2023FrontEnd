@@ -8,7 +8,7 @@
                         <h2>Resgistrazione</h2>
                     </v-card-title>
                     <v-card-text>
-                        <v-form @submit="register">
+                        <v-form>
                             <v-text-field
                                     v-model="username"
                                     label="Username"
@@ -22,7 +22,7 @@
                                     required
                             ></v-text-field>
 
-                            <v-btn type="submit">Resgitra</v-btn>
+                            <v-btn @click="register">Resgitra</v-btn>
                         </v-form>
                     </v-card-text>
                 </v-card>
