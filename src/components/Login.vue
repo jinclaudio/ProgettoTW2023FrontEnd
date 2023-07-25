@@ -83,7 +83,7 @@ function checkLoginStatus() {
           console.log("Utente loggato", response.data[0].username)
         })
         .catch(error => {
-          console.log("Utente non loggato o scaduto")
+          console.log("Utente non loggato o scaduto", error)
         })
   } else {
     console.log("Utente non loggato")
