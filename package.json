@@ -4,12 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 0.0.0.0",
     "build": "vue-tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "axios": "^1.4.0",
+    "axios": "^1.5.1",
     "bootstrap": "^5.3.0",
     "element-plus": "^2.3.4",
     "primevue": "^3.28.0",
@@ -18,7 +18,10 @@
     "vuetify": "^3.3.9"
   },
   "devDependencies": {
+    "@mdi/font": "^7.2.96",
+    "@mdi/js": "^7.2.96",
     "@vitejs/plugin-vue": "^4.1.0",
+    "material-design-icons-iconfont": "^6.7.0",
     "typescript": "^5.0.2",
     "unplugin-auto-import": "^0.15.3",
     "unplugin-vue-components": "^0.24.1",

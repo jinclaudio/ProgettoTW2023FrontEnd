@@ -1,37 +1,38 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import axios from "axios";
 
 const drawer = ref(true)
 const rail = ref(true)
+const userinfo = ref('')
 const username = ref('')
-let plan: string;
-let credit: number;
-let amount: number;
+
 
 // let portrait: string;
-function getUserInfo() {
-
-  const token = localStorage.getItem('token');
-  if (!token) {
-    console.log('Utente non oggato！');
-    return;
-  }
-  axios.get('http://127.0.0.1:3000/users/getUser', {
-    headers: {
-      'Authorization': `Bearer ${token}`
+async function getUserInfo() {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.log('Utente non oggato！');
+      return;
     }
-  })
-      .then(response => {
-        username.value = response.data[0].username;
-        console.log(response.data[0])
-      })
-      .catch(error => {
-        console.error('Si e verificato un errore', error);
-      });
+    const response = await axios.get('http://localhost:3000/social/user_detail', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    return response.data.user
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 getUserInfo()
+onMounted(async () => {
+  userinfo.value = await getUserInfo()
+  console.log(userinfo.value)
+
+})
 </script>
 
 <template>
@@ -43,7 +44,7 @@ getUserInfo()
   >
     <v-list-item
         prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg"
-        :title=username
+        :title=userinfo.username
         nav
     >
       <template v-slot:append>
@@ -52,17 +53,16 @@ getUserInfo()
             icon="mdi-chevron-left"
             @click.stop="rail = !rail"
         ></v-btn>
+<!--        {{ // erinfo}}-->
       </template>
     </v-list-item>
 
 
     <v-list density="compact" nav>
-      <v-list-item prepend-icon="mdi-home-city" title="Home" value="home"></v-list-item>
       <v-list-item prepend-icon="mdi-account" title="My Account" value="account"></v-list-item>
-      <v-list-item prepend-icon="mdi-account-group-outline" title="Users" value="users"></v-list-item>
     </v-list>
   </v-navigation-drawer>
-
+<!--  {{ userinfo }}-->
 </template>
 
 <style scoped>

@@ -1,39 +1,37 @@
-<script setup lang="ts">
-import Login from "./components/Login.vue";
-import Register from "./components/Register.vue";
-import Squeal from "./components/Squeal.vue";
-import UserInfo from "./components/UserInfo.vue";
-import NewPost from "./components/NewPost.vue";
-import {ref} from "vue";
+<template>
+  <v-layout class="overflow-visible" style="height: 56px;">
+    <v-bottom-navigation
+        v-model="value"
+        color="primary"
+        grow
+    >
+      <v-btn to="/">
+        <v-icon>mdi-home</v-icon>
+
+        Home
+      </v-btn>
+
+      <v-btn to="/login">
+        <v-icon icon="mdi-magnify"></v-icon>
+
+        Favorites
+      </v-btn>
+
+      <v-btn to="/register">
+        <v-icon>mdi-map-marker</v-icon>
+
+        Nearby
+      </v-btn>
+    </v-bottom-navigation>
+  </v-layout>
+  <router-view/>
+</template>
+<script setup>
+import { computed, ref } from 'vue'
+const value = ref(1)
 
 
 </script>
-
-<template>
-  <v-card>
-    <v-layout>
-      <user-info/>
-      <v-card>
-        <Squeal
-            messaggio="Questo è un messaggio di prova"/>
-
-          <Squeal
-            messaggio="Questo è un messaggio di prova1"/>
-        <Squeal
-            messaggio="Questo è un messaggio di prova2"/>
-        <Squeal
-            messaggio="Questo è un messaggio di prova3"/>
-      </v-card>
-
-
-    </v-layout>
-  </v-card>
-  <Login/>
-  <Register/>
-
-  <NewPost/>
-</template>
-
 <style scoped>
 .logo {
   height: 6em;

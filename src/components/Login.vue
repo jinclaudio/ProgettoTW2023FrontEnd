@@ -23,8 +23,8 @@
                   required
               ></v-text-field>
               <v-btn @click="login" class="mr-3" color="primary">Login</v-btn>
-              <v-btn>Registra</v-btn>
               <v-btn @click="checkLoginStatus">check</v-btn>
+              <v-btn>Registra</v-btn>
 
             </v-form>
           </v-card-text>
@@ -32,29 +32,31 @@
       </v-col>
     </v-row>
   </v-container>
+  {{ messaggio }}
 </template>
 
 <script setup lang="ts">
 import {ref} from 'vue';
 import axios from 'axios';
+import Login from "./Login.vue";
 // import {useRouter} from 'vue-router';
 
 
 const username = ref('');
 const password = ref('');
-const error = ref('');
-
+const messaggio = ref('');
 // const router = useRouter();
 
 async function login() {
   try {
-    const response = await axios.post('http://127.0.0.1:3000/users/login', {
+    const response = await axios.post('http://localhost:3000/social/login', {
       username: username.value,
       password: password.value,
     });
     const data = response.data;
     if (data.token) {
       localStorage.setItem('token', data.token);
+
       console.log("Logged con successo!", data.token)
 
     } else {
@@ -73,16 +75,18 @@ function logout() {
 function checkLoginStatus() {
   const token = localStorage.getItem('token');
   if (token) {
-    axios.get('http://127.0.0.1:3000/users/getUser', {
+    axios.get('http://localhost:3000/social/user_detail', {
       headers: {
         'Authorization': `Bearer ${token}`
 
       }
     })
         .then(response => {
-          console.log("Utente loggato", response.data[0].username)
+          messaggio.value = response.data
+          console.log("Utente loggato", response.data)
         })
         .catch(error => {
+          messaggio.value = error
           console.log("Utente non loggato o scaduto", error)
         })
   } else {
