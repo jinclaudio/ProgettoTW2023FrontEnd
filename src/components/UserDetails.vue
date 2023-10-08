@@ -19,10 +19,18 @@ async function logout() {
   console.log(token)
   console.log("logged out");
 }
+function goToModeratore(){
+  const confirmation = window.confirm('Vuoi andare sulla pagina del moderatore?');
+  if (confirmation){
+    window.location.href = 'http://localhost:63342/mod/index.html?_ijt=nf22vifuapdo5dn05s8ugjm07q'; // 将 'https://www.example.com' 替换为目标网站的URL
+  }
+
+}
 
 onMounted(async () => {
   data.value = await getUserInfo(data.value);
   console.log(data.value);
+  if (data.value.accountType === 'mod'){ goToModeratore()}
   console.log(data.value.creditAvailable.daily)
 
 });

@@ -3,7 +3,6 @@
 import Squeal from "./Squeal.vue";
 import axios from 'axios'
 import {onMounted, ref} from "vue";
-import { useRouter} from "vue-router";
 
 async function getSqueals() {
   try {
@@ -21,10 +20,6 @@ async function getSqueals() {
 
 let Squeals = ref()
 
-function goToNewPost(){
-  const router = useRouter()
-  router.push('/new_post')
-}
 
 onMounted(async () => {
   Squeals.value = await getSqueals()

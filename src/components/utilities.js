@@ -24,19 +24,19 @@ export async function getUserInfo(data) {
 }
 
 
-export async function logout() {
-    const router = useRouter();
-    const token = localStorage.getItem('token');
-    if (token) {
-        localStorage.removeItem('token');
-
-    }
-    await router.push('/')
-    window.location.reload();
-
-    console.log(token)
-    console.log("logged out");
-}
+// export async function logout() {
+//     const router = useRouter();
+//     const token = localStorage.getItem('token');
+//     if (token) {
+//         localStorage.removeItem('token');
+//
+//     }
+//     await router.push('/')
+//     window.location.reload();
+//
+//     console.log(token)
+//     console.log("logged out");
+// }
 
 export function checkLoginStatus() {
     const token = localStorage.getItem('token');
@@ -57,4 +57,6 @@ export function checkLoginStatus() {
         console.log("Utente non loggato")
     }
 }
+
+
 
