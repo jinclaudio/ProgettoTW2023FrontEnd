@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
-import Sidebar from "./Sidebar.vue";
 import Squeal from "./Squeal.vue";
 import axios from 'axios'
 import {onMounted, ref} from "vue";
+import { useRouter} from "vue-router";
 
 async function getSqueals() {
   try {
@@ -21,6 +21,10 @@ async function getSqueals() {
 
 let Squeals = ref()
 
+function goToNewPost(){
+  const router = useRouter()
+  router.push('/new_post')
+}
 
 onMounted(async () => {
   Squeals.value = await getSqueals()
@@ -32,7 +36,7 @@ onMounted(async () => {
 <template>
   <!--<v-btn @click="getSqueals">get</v-btn>-->
   <v-layout>
-    <sidebar/>
+<!--    <sidebar/>-->
     <v-sheet rounded width="auto">
       <Squeal v-for="squeal in Squeals" :key="squeal"
               :messaggio="squeal.body"
@@ -41,10 +45,26 @@ onMounted(async () => {
       ></Squeal>
     </v-sheet>
 
+      <v-btn
+          class="absolute-right-bottom"
+          color="primary"
+          to="/new_post"
+      >
+        发布
+      </v-btn>
+
   </v-layout>
 
 </template>
 
 <style scoped>
-
+/* 添加样式以固定按钮位置 */
+.absolute-right-bottom {
+  position: fixed;
+  bottom: 20vw; /* 距离底部的距离 */
+  right: 10vw; /* 距离右侧的距离 */
+}
+.button-container {
+  position: relative;
+}
 </style>

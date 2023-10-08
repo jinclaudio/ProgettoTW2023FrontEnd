@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 import axios from "axios";
+import { logout } from "./utilities.js";
 
 const drawer = ref(true)
 const rail = ref(true)
@@ -9,6 +10,7 @@ const username = ref('')
 
 
 // let portrait: string;
+
 async function getUserInfo() {
   try {
     const token = localStorage.getItem('token');
@@ -47,6 +49,7 @@ onMounted(async () => {
         :title=userinfo.username
         nav
     >
+
       <template v-slot:append>
         <v-btn
             variant="text"
@@ -59,8 +62,9 @@ onMounted(async () => {
 
 
     <v-list density="compact" nav>
-      <v-list-item prepend-icon="mdi-account" title="My Account" value="account"></v-list-item>
+      <v-list-item prepend-icon="mdi-account" title="My Account" value="account" to="/user_detail"></v-list-item>
     </v-list>
+
   </v-navigation-drawer>
 <!--  {{ userinfo }}-->
 </template>

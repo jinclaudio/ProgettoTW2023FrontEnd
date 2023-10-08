@@ -1,5 +1,4 @@
 import {createRouter, createWebHistory} from "vue-router";
-
 import Homepage from "../components/Homepage.vue";
 // import Login from "../components/Login.vue";
 
@@ -21,8 +20,32 @@ const router = createRouter({
             name: 'register',
             component: () => import('../components/Register.vue')
         },
+        {
+            path: '/user_detail',
+            name: 'user_detail',
+            component: () => import('../components/UserDetails.vue'),
+            meta: { requiresAuth: true}
+        },
+        {
+            path: '/new_post',
+            name: 'new_post',
+            component: () => import('../components/NewPost.vue'),
+            meta: { requiresAuth: true}
+        }
 
     ]
 })
+router.beforeEach( (to, from, next) => {
+    const token = localStorage.getItem('token');
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
+        if (token === null) {
+            next('/login');
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
+});
 
 export default router

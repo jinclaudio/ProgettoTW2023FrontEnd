@@ -1,0 +1,72 @@
+<script setup lang="ts">
+
+import { getUserInfo} from "./utilities.js"
+import {onMounted, ref} from "vue";
+import {useRouter} from "vue-router";
+
+const data = ref()
+const router = useRouter();
+
+async function logout() {
+  const token = localStorage.getItem('token');
+  if (token) {
+    localStorage.removeItem('token');
+
+  }
+  await router.push('/')
+  window.location.reload();
+
+  console.log(token)
+  console.log("logged out");
+}
+
+onMounted(async () => {
+  data.value = await getUserInfo(data.value);
+  console.log(data.value);
+  console.log(data.value.creditAvailable.daily)
+
+});
+</script>
+
+<template>
+
+  <v-card width="80vw" v-if="data">
+    <v-card-title >
+      {{ data.username }}
+
+    </v-card-title>
+    <v-card width="100%">
+    <v-card-text>Credit available:</v-card-text>
+
+    <div class="text-caption">Daily: {{data.creditAvailable.daily}}</div>
+    <v-progress-linear
+        :model-value=data.creditAvailable.daily
+        color="blue-grey"
+        height="15"
+        rounded
+    ></v-progress-linear>
+    <div class="text-caption">Weekly: {{data.creditAvailable.weekly}}</div>
+    <v-progress-linear
+        :model-value=data.creditAvailable.weekly
+        color="amber"
+        height="15"
+        rounded
+    ></v-progress-linear>
+    <div class="text-caption">Monthly: {{data.creditAvailable.monthly}}</div>
+    <v-progress-linear
+        :model-value=data.creditAvailable.monthly
+        color="light-blue"
+        height="15"
+        rounded
+    ></v-progress-linear>
+    </v-card>
+  </v-card>
+  <br>
+  <v-btn
+      append-icon="mdi-logout"
+      @click="logout">Logout</v-btn>
+</template>
+
+<style scoped>
+
+</style>
