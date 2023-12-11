@@ -38,26 +38,35 @@ onMounted(async () => {
 </script>
 
 <template>
+
+
+      <v-app-bar
+          scroll-behavior="elevate"
+          density="compact"
+          prominent
+      >
+        <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+
+        <v-toolbar-title>Squealer</v-toolbar-title>
+
+<!--        <v-spacer></v-spacer>-->
+
+        <v-btn variant="text" icon="mdi-magnify"></v-btn>
+      </v-app-bar>
+
+
+
+
+
   <v-navigation-drawer
       v-model="drawer"
-      :rail="rail"
-      permanent
-      @click="rail = false"
+      location="left"
   >
     <v-list-item
         prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg"
         :title=userinfo.username
         nav
     >
-
-      <template v-slot:append>
-        <v-btn
-            variant="text"
-            icon="mdi-chevron-left"
-            @click.stop="rail = !rail"
-        ></v-btn>
-<!--        {{ // erinfo}}-->
-      </template>
     </v-list-item>
 
 

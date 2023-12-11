@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { getUserInfo} from "./utilities.js"
+import { getUserInfo, topUp} from "./utilities.js"
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 
@@ -70,6 +70,7 @@ onMounted(async () => {
     </v-card>
   </v-card>
   <br>
+  <v-btn @click="topUp(10000)">Top Up</v-btn>
   <v-btn
       append-icon="mdi-logout"
       @click="logout">Logout</v-btn>

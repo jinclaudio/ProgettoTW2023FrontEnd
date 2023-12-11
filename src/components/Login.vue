@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="12" lg-="4">
-        <v-card>
+        <v-card min-width="400">
           <v-card-title class="justify-center">
             <h2>Login</h2>
           </v-card-title>
@@ -22,9 +22,9 @@
                   type="password"
                   required
               ></v-text-field>
-              <v-btn @click="login" class="mr-3" color="primary">Login</v-btn>
-              <v-btn @click="checkLoginStatus">check</v-btn>
-              <v-btn>Registra</v-btn>
+              <v-btn @click="login" @keyup.enter.native="login" class="mr-3" color="primary">Login</v-btn>
+<!--              <v-btn @click="checkLoginStatus">check</v-btn>-->
+              <v-btn to="/register">Registra</v-btn>
 
             </v-form>
           </v-card-text>
@@ -32,6 +32,7 @@
       </v-col>
     </v-row>
   </v-container>
+  <v-snackbar v-model="notify" :timeout="2000" color="success" variant="outlined"></v-snackbar>
 </template>
 
 <script setup lang="ts">
@@ -42,6 +43,7 @@ import {useRouter} from "vue-router";
 const router = useRouter()
 const username = ref('');
 const password = ref('');
+const notify = ref()
 // const messaggio = ref('');
 
 async function login() {
@@ -56,6 +58,7 @@ async function login() {
       localStorage.setItem('token', data.token);
 
       console.log("Logged con successo!", data.token)
+      notify.value = "Logged con successo!"
       await router.push({ name: 'home'})
       window.location.reload();
 

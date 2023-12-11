@@ -32,7 +32,7 @@ onMounted(async () => {
   <!--<v-btn @click="getSqueals">get</v-btn>-->
   <v-layout>
 <!--    <sidebar/>-->
-    <v-sheet rounded width="auto">
+    <v-sheet rounded width="70vw">
       <Squeal v-for="squeal in Squeals" :key="squeal"
               :messaggio="squeal.body"
               :autore="squeal.username"
@@ -56,7 +56,7 @@ onMounted(async () => {
 /* 添加样式以固定按钮位置 */
 .absolute-right-bottom {
   position: fixed;
-  bottom: 20vw; /* 距离底部的距离 */
+  bottom: 10vw; /* 距离底部的距离 */
   right: 10vw; /* 距离右侧的距离 */
 }
 .button-container {
