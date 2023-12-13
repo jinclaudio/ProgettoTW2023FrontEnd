@@ -1,43 +1,70 @@
 <script setup lang="ts">
 
 import Squeal from "./Squeal.vue";
-import axios from 'axios'
-import {onMounted, ref} from "vue";
 
-async function getSqueals() {
-  try {
-    const token = localStorage.getItem('token');
-    const response = await axios.get("http://localhost:3000/social/get_all_squeals", {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
-    return response.data
-  } catch (error) {
-    console.log(error)
-  }
+import { onMounted, ref} from "vue";
+import { like, getUserInfo, getSqueals } from "./utilities.js";
+
+
+let likeColor = function getLikeColor(squealId)  {
+  return User.value.hasLiked.includes(squealId) ? 'red' : '';
 }
-
-let Squeals = ref()
-
-
+function toggleLike(squeal){
+  like(squeal._id)
+  const color = likeColor(squeal._id)
+  if (color !== 'red'){
+    squeal.reaction.like++
+  }
+  User.value.hasLiked.push(squeal._id)
+  console.log(User.value.hasLiked)
+}
+const Squeals = ref()
+const User = ref()
 onMounted(async () => {
+  User.value = await getUserInfo(User.value)
   Squeals.value = await getSqueals()
-  console.log(Squeals.value)
+  console.log(User.value.hasLiked)
 
 })
 </script>
 
 <template>
-  <!--<v-btn @click="getSqueals">get</v-btn>-->
+
   <v-layout>
-<!--    <sidebar/>-->
     <v-sheet rounded width="70vw">
-      <Squeal v-for="squeal in Squeals" :key="squeal"
-              :messaggio="squeal.body"
-              :autore="squeal.username"
-              :like="squeal.reaction.like"
-      ></Squeal>
+      <v-list>
+        <v-list-item v-for="(squeal, index) in Squeals" :key="index">
+          <v-card
+              class="mx-auto"
+              max-width="344"
+              :title=squeal.username
+              align="left"
+          >
+            <template v-slot:prepend>
+              <v-avatar image="https://picsum.photos/200/300"></v-avatar>
+            </template>
+            <router-link :to="{name: 'squeal', params: { id: squeal._id}}">
+            <v-card-item>
+              {{ squeal.body}}
+            </v-card-item>
+            </router-link>
+            <template v-slot:append >
+              <div class="justify-self-end">
+                <v-icon class="me-1"
+                          @click="toggleLike(squeal) "
+                          icon="mdi-heart"
+                          :color="likeColor(squeal._id)">
+
+                  </v-icon>
+                <span class="subheading me-2">{{ squeal.reaction.like}}</span>
+                <span class="me-1">·</span>
+                <v-icon class="me-1" icon="mdi-share-variant"></v-icon>
+                <span class="subheading">45</span>
+              </div>
+            </template>
+          </v-card>
+        </v-list-item>
+      </v-list>
     </v-sheet>
 
       <v-btn

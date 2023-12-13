@@ -6,7 +6,8 @@ import {useRouter} from "vue-router";
 
 const data = ref()
 const router = useRouter();
-
+const dialog = ref()
+const amount = ref()
 async function logout() {
   const token = localStorage.getItem('token');
   if (token) {
@@ -71,6 +72,12 @@ onMounted(async () => {
   </v-card>
   <br>
   <v-btn @click="topUp(10000)">Top Up</v-btn>
+  <v-dialog v-model="dialog" width="500">
+    <v-card>
+      <v-card-title>Quanto vuoi ricaricare?</v-card-title>
+      <v-card-text><v-text-field v-model="amount"></v-text-field></v-card-text>
+    </v-card>
+  </v-dialog>
   <v-btn
       append-icon="mdi-logout"
       @click="logout">Logout</v-btn>

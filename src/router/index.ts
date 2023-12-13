@@ -31,6 +31,11 @@ const router = createRouter({
             name: 'new_post',
             component: () => import('../components/NewPost.vue'),
             meta: { requiresAuth: true}
+        },
+        {
+            path: '/post_details/:id',
+            name: 'squeal',
+            component: () => import('../components/Squeal.vue')
         }
 
     ]

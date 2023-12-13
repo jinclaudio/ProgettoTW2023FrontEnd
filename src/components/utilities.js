@@ -90,5 +90,39 @@ export function checkLoginStatus() {
     }
 }
 
+export async function getSqueals() {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get("http://localhost:3000/social/get_all_squeals", {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
+}
 
+export async function like(obj_id){
+    try {
+        const token = localStorage.getItem('token');
+        const res = await axios.patch('http://localhost:3000/social/likeSqueal',
+            {
+                id: obj_id,
+
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                }
+            })
+
+        console.log(res.data)
+        return res.data
+    } catch (error) {
+        console.log(obj_id)
+        console.log(error)
+    }
+}
 
