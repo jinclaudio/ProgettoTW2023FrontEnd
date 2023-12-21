@@ -1,10 +1,11 @@
-import { ref } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 
-const router = useRouter();
+// const router = useRouter();
 
-export async function getUserInfo(data) {
+
+export async function getUserInfo() {
+    let data
     try {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -22,7 +23,7 @@ export async function getUserInfo(data) {
         console.log(error)
     }
 }
-export async function useCredit(credit){
+export async function useCredit(credit: number){
     try {
         const token = localStorage.getItem('token');
         const res = await axios.patch('http://localhost:3000/social/updateCredit',
@@ -37,7 +38,7 @@ export async function useCredit(credit){
         console.log(error)
     }
 }
-export async function topUp(amount){
+export async function topUp(amount:number){
     try {
         const token = localStorage.getItem('token');
         const res = await axios.patch('http://localhost:3000/social/updateCredit',
@@ -104,7 +105,7 @@ export async function getSqueals() {
     }
 }
 
-export async function like(obj_id){
+export async function like(obj_id: string){
     try {
         const token = localStorage.getItem('token');
         const res = await axios.patch('http://localhost:3000/social/likeSqueal',

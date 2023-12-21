@@ -1,15 +1,15 @@
 <script setup lang="ts">
 
-import Squeal from "./Squeal.vue";
+// import Squeal from "./Squeal.vue";
 
 import { onMounted, ref} from "vue";
-import { like, getUserInfo, getSqueals } from "./utilities.js";
+import { like, getUserInfo, getSqueals } from "./utilities.ts";
 
 
-let likeColor = function getLikeColor(squealId)  {
+let likeColor = function getLikeColor(squealId:string)  {
   return User.value.hasLiked.includes(squealId) ? 'red' : '';
 }
-function toggleLike(squeal){
+function toggleLike(squeal:any){
   like(squeal._id)
   const color = likeColor(squeal._id)
   if (color !== 'red'){
@@ -23,7 +23,6 @@ const User = ref()
 onMounted(async () => {
   User.value = await getUserInfo(User.value)
   Squeals.value = await getSqueals()
-  console.log(User.value.hasLiked)
 
 })
 </script>
@@ -44,9 +43,8 @@ onMounted(async () => {
               <v-avatar image="https://picsum.photos/200/300"></v-avatar>
             </template>
             <router-link :to="{name: 'squeal', params: { id: squeal._id}}">
-            <v-card-item>
-              {{ squeal.body}}
-            </v-card-item>
+            <v-card :text=squeal.body>
+            </v-card>
             </router-link>
             <template v-slot:append >
               <div class="justify-self-end">

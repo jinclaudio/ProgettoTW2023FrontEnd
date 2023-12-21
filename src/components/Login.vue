@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import {ref} from 'vue';
-import { checkLoginStatus} from "./utilities.js";
+import { checkLoginStatus} from "./utilities.ts";
 import axios from "axios";
 import {useRouter} from "vue-router";
 const router = useRouter()

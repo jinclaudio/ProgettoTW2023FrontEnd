@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 import axios from "axios";
-import { logout } from "./utilities.js";
+// import { logout } from "./utilities.ts";
 
 const drawer = ref(true)
-const rail = ref(true)
-const userinfo = ref('')
-const username = ref('')
+const userinfo = ref()
+// const username = ref()
 
 
 // let portrait: string;
@@ -60,17 +59,18 @@ onMounted(async () => {
 
   <v-navigation-drawer
       v-model="drawer"
+      v-if="userinfo"
       location="left"
   >
     <v-list-item
         prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg"
         :title=userinfo.username
-        nav
+        nav=""
     >
     </v-list-item>
 
 
-    <v-list density="compact" nav>
+    <v-list density="compact" nav="">
       <v-list-item prepend-icon="mdi-account" title="My Account" value="account" to="/user_detail"></v-list-item>
     </v-list>
 

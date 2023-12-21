@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { getUserInfo, topUp} from "./utilities.js"
+import { getUserInfo, topUp} from "./utilities.ts"
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 

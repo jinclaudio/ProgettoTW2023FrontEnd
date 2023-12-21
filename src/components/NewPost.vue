@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {computed, onMounted, ref} from 'vue'
 import axios from "axios";
-import {getUserInfo, useCredit } from "./utilities.js";
+import { getUserInfo, useCredit } from "./utilities.ts";
 
 const text = ref('');
 const credit = ref()
