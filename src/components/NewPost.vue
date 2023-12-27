@@ -43,7 +43,7 @@ async function postASqueal() {
 
 async function fetchCreditAvailable() {
   try {
-    const userInfo = await getUserInfo();
+    const userInfo = await getUserInfo(User.value);
     const creditAvailable = userInfo.creditAvailable;
     console.log('Credit Available:', creditAvailable);
 

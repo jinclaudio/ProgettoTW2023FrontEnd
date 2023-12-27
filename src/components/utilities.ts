@@ -4,7 +4,7 @@ import { useRouter } from "vue-router";
 // const router = useRouter();
 
 
-export async function getUserInfo() {
+export async function getUserInfo(value: any) {
     let data
     try {
         const token = localStorage.getItem('token');
