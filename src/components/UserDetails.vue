@@ -29,7 +29,7 @@ function goToModeratore(){
 }
 
 onMounted(async () => {
-  data.value = await getUserInfo(User.value);
+  data.value = await getUserInfo(data.value);
   console.log(data.value);
   if (data.value.accountType === 'mod'){ goToModeratore()}
   console.log(data.value.creditAvailable.daily)

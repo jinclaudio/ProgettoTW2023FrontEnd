@@ -4,7 +4,7 @@ import { useRouter } from "vue-router";
 // const router = useRouter();
 
 
-export async function getUserInfo(value: any) {
+export async function getUserInfo() {
     let data
     try {
         const token = localStorage.getItem('token');
@@ -105,6 +105,17 @@ export async function getSqueals() {
     }
 }
 
+export async function getSingleSquealInfo(id){
+    try{
+        const response = await axios.get("http://localhost:3000/social/singleSqueal", {
+            params: {id: id}
+        })
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
+
+}
 export async function like(obj_id: string){
     try {
         const token = localStorage.getItem('token');
@@ -126,4 +137,3 @@ export async function like(obj_id: string){
         console.log(error)
     }
 }
-
