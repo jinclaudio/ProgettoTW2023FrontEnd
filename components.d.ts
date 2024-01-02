@@ -11,15 +11,14 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ApplicationBar: typeof import('./src/components/ApplicationBar.vue')['default']
     BottomNav: typeof import('./src/components/BottomNav.vue')['default']
+    Channels: typeof import('./src/components/Channels.vue')['default']
     Homepage: typeof import('./src/components/Homepage.vue')['default']
     Login: typeof import('./src/components/Login.vue')['default']
     NewPost: typeof import('./src/components/NewPost.vue')['default']
     Register: typeof import('./src/components/Register.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Sidebar: typeof import('./src/components/Sidebar.vue')['default']
     Squeal: typeof import('./src/components/Squeal.vue')['default']
     UserDetails: typeof import('./src/components/UserDetails.vue')['default']
-    UserInfo: typeof import('./src/components/UserInfo.vue')['default']
   }
 }

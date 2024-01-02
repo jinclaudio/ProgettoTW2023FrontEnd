@@ -29,24 +29,35 @@ function toggleLike(squeal: any) {
 
 }
 
+import io from 'socket.io-client';
+const socket = io('http://localhost:3000')
+const message1 = ref('')
+
+socket.on('serverMessage', (message) => {
+  message1.value = message;
+  console.log(message1.value)
+});
+
 const Squeals = ref()
+
 const User = ref()
 onMounted(async () => {
-  User.value = await getUserInfo(User.value)
+  User.value = await getUserInfo()
   Squeals.value = await getSqueals()
 
 })
 </script>
 
 <template>
-
+  {{ message1 }}
   <v-layout>
     <v-sheet rounded width="70vw">
-      <v-infinite-scroll :items="Squeals" on-load="getSqueals">
-        <template v-for="(squeal, index) in Squeals" :key="index">
+      <v-list :items="Squeals" on-load="getSqueals">
+        <template v-for="(squeal) in Squeals">
           <v-card
+              style="padding-bottom: 2rem"
               class="mx-auto"
-              max-width="344"
+              max-width="50rem"
               :title=squeal.username
               align="left"
           >
@@ -73,7 +84,7 @@ onMounted(async () => {
             </template>
           </v-card>
         </template>
-      </v-infinite-scroll>
+      </v-list>
     </v-sheet>
 
     <v-btn
@@ -86,7 +97,7 @@ onMounted(async () => {
 
   </v-layout>
   <v-snackbar :timeout="2000" color="red" rounded="pill" v-model="showSnackbar">
-  {{ pleaseLogin }}
+    {{ pleaseLogin }}
   </v-snackbar>
 </template>
 

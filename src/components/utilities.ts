@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useRouter } from "vue-router";
+import {useRouter} from "vue-router";
 
 // const router = useRouter();
 
@@ -23,11 +23,12 @@ export async function getUserInfo() {
         console.log(error)
     }
 }
-export async function useCredit(credit: number){
+
+export async function useCredit(credit: number) {
     try {
         const token = localStorage.getItem('token');
         const res = await axios.patch('http://localhost:3000/social/updateCredit',
-            { value: credit}, {
+            {value: credit}, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -38,7 +39,8 @@ export async function useCredit(credit: number){
         console.log(error)
     }
 }
-export async function topUp(amount:number){
+
+export async function topUp(amount: number) {
     try {
         const token = localStorage.getItem('token');
         const res = await axios.patch('http://localhost:3000/social/updateCredit',
@@ -105,8 +107,23 @@ export async function getSqueals() {
     }
 }
 
-export async function getSingleSquealInfo(id){
-    try{
+// typeOfChannel: insert O for official, P for private
+export async function getChannels(typeOfChannel: string) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`http://localhost:3000/social/allChannel${typeOfChannel}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function getSingleSquealInfo(id: string) {
+    try {
         const response = await axios.get("http://localhost:3000/social/singleSqueal", {
             params: {id: id}
         })
@@ -116,7 +133,8 @@ export async function getSingleSquealInfo(id){
     }
 
 }
-export async function like(obj_id: string){
+
+export async function like(obj_id: string) {
     try {
         const token = localStorage.getItem('token');
         const res = await axios.patch('http://localhost:3000/social/likeSqueal',
@@ -135,5 +153,33 @@ export async function like(obj_id: string){
     } catch (error) {
         console.log(obj_id)
         console.log(error)
+    }
+}
+
+export async function squealView(squealID: string) {
+    try {
+        const res = await axios.post('http://localhost:3000/social/update_view',
+            {
+                id: squealID,
+            })
+
+        console.log(res.data)
+        return res.data
+    } catch (error) {
+
+    }
+}
+
+export async function squealViewCount(squealID: string) {
+    try {
+        const res = await axios.get('http://localhost:3000/social/get_views',
+            {
+                params: {id: squealID},
+            })
+
+        console.log(res.data)
+        return res.data
+    } catch (error) {
+
     }
 }

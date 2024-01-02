@@ -1,9 +1,9 @@
-import {createRouter, createWebHistory} from "vue-router";
+import {createRouter, createWebHashHistory} from "vue-router";
 import Homepage from "../components/Homepage.vue";
 // import Login from "../components/Login.vue";
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHashHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: '/',
@@ -36,11 +36,16 @@ const router = createRouter({
             path: '/post_details/:id',
             name: 'squeal',
             component: () => import('../components/Squeal.vue')
+        },
+        {
+            path: '/channel',
+            name: 'channel',
+            component: () => import('../components/Channels.vue')
         }
 
     ]
 })
-router.beforeEach( (to, from, next) => {
+router.beforeEach( (to, _from, next) => {
     const token = localStorage.getItem('token');
     if (to.matched.some((record) => record.meta.requiresAuth)) {
         if (token === null) {

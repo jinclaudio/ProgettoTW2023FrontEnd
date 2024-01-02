@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {computed, onMounted, ref} from 'vue'
 import axios from "axios";
-import { getUserInfo, useCredit } from "./utilities.ts";
+import { getUserInfo, useCredit, getChannels } from "./utilities.ts";
 
 const text = ref('');
 const credit = ref()
@@ -13,13 +13,14 @@ const dest = ref()
 const image = ref()
 const errore = ref()
 const success = ref()
-
-
+const channelList = ref()
+const channelSelected = ref()
 async function postASqueal() {
   const token = localStorage.getItem('token');
   const formData = new FormData();
   formData.append('body', text.value);
   formData.append('destinatari', dest.value);
+  formData.append('channel', channelSelected.value);
   if (image.value !== undefined){  formData.append('image', image.value[0]);}
   await axios.post('http://127.0.0.1:3000/social/squeal_post', formData,
       {
@@ -55,6 +56,11 @@ async function fetchCreditAvailable() {
 
 onMounted(async () => {
   credit.value = await fetchCreditAvailable();
+  channelList.value = await getChannels("P");
+  for (let i in channelList.value){
+    channelList.value[i] = channelList.value[i].name
+  }
+  console.log(channelList.value[0])
   console.log(credit.value.daily);
 
 });
@@ -76,8 +82,13 @@ console.log(credit.value)
                       ></v-textarea>
 
             <v-text-field label="Destinatari" v-model="dest">
-
             </v-text-field>
+            <v-select v-if="channelList" label="Canale"
+                      v-model="channelSelected"
+                      :items="channelList"
+                      clearable
+            ></v-select>
+
             <v-menu>
               <template v-slot:activator="{ props }">
                 <v-btn v-bind="props">Allegati</v-btn>

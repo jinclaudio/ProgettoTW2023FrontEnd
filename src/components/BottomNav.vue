@@ -17,10 +17,10 @@ const value = ref(1)
       Home
     </v-btn>
 
-    <v-btn to="/login">
-      <v-icon icon="mdi-magnify"></v-icon>
+    <v-btn to="/channel">
+      <v-icon>mdi-view-list</v-icon>
 
-      Favorites
+      Canali
     </v-btn>
 
     <v-btn to="/register">
