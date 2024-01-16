@@ -1,8 +1,12 @@
-import axios from "axios";
 import {useRouter} from "vue-router";
+import axios from "axios";
 
 // const router = useRouter();
 
+export const apiClient = axios.create({
+    baseURL: "http://localhost:3000/"
+
+});
 
 export async function getUserInfo() {
     let data
@@ -12,13 +16,13 @@ export async function getUserInfo() {
             console.log('Utente non oggato！');
             return;
         }
-        const response = await axios.get('http://localhost:3000/social/user_detail', {
+        const response = await apiClient.get('/social/user_detail', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
         data = response.data
-        return data.user
+        return data
     } catch (error) {
         console.log(error)
     }
@@ -27,7 +31,7 @@ export async function getUserInfo() {
 export async function useCredit(credit: number) {
     try {
         const token = localStorage.getItem('token');
-        const res = await axios.patch('http://localhost:3000/social/updateCredit',
+        const res = await apiClient.patch('http://localhost:3000/social/updateCredit',
             {value: credit}, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -43,7 +47,7 @@ export async function useCredit(credit: number) {
 export async function topUp(amount: number) {
     try {
         const token = localStorage.getItem('token');
-        const res = await axios.patch('http://localhost:3000/social/updateCredit',
+        const res = await apiClient.patch('http://localhost:3000/social/updateCredit',
             {
                 value: amount,
 
@@ -77,7 +81,7 @@ export async function logout() {
 export function checkLoginStatus() {
     const token = localStorage.getItem('token');
     if (token) {
-        axios.get('http://localhost:3000/social/user_detail', {
+        apiClient.get('http://localhost:3000/social/user_detail', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -96,7 +100,7 @@ export function checkLoginStatus() {
 export async function getSqueals() {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get("http://localhost:3000/social/get_all_squeals", {
+        const response = await apiClient.get("/social/get_all_squeals", {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -111,7 +115,7 @@ export async function getSqueals() {
 export async function getChannels(typeOfChannel: string) {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:3000/social/allChannel${typeOfChannel}`, {
+        const response = await apiClient.get(`social/allChannel${typeOfChannel}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -124,7 +128,7 @@ export async function getChannels(typeOfChannel: string) {
 
 export async function getSingleSquealInfo(id: string) {
     try {
-        const response = await axios.get("http://localhost:3000/social/singleSqueal", {
+        const response = await apiClient.get("http://localhost:3000/social/singleSqueal", {
             params: {id: id}
         })
         return response.data
@@ -137,7 +141,7 @@ export async function getSingleSquealInfo(id: string) {
 export async function like(obj_id: string) {
     try {
         const token = localStorage.getItem('token');
-        const res = await axios.patch('http://localhost:3000/social/likeSqueal',
+        const res = await apiClient.patch('http://localhost:3000/social/likeSqueal',
             {
                 id: obj_id,
 
@@ -158,7 +162,7 @@ export async function like(obj_id: string) {
 
 export async function squealView(squealID: string) {
     try {
-        const res = await axios.post('http://localhost:3000/social/update_view',
+        const res = await apiClient.post('http://localhost:3000/social/update_view',
             {
                 id: squealID,
             })
@@ -172,7 +176,7 @@ export async function squealView(squealID: string) {
 
 export async function squealViewCount(squealID: string) {
     try {
-        const res = await axios.get('http://localhost:3000/social/get_views',
+        const res = await apiClient.get('http://localhost:3000/social/get_views',
             {
                 params: {id: squealID},
             })

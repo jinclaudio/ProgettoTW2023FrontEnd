@@ -16,6 +16,7 @@ onMounted(async () => {
   data.value = await getSingleSquealInfo(String(SquealID.value))
   viewedCount.value = await squealViewCount(String(SquealID.value))
   if (data.value[0].image !== null) {
+    console.log(data.value[0])
     const filename = data.value[0].image
     image.value = `http://localhost:3000/social/get_image?image=${filename}`
   }

@@ -8,9 +8,10 @@ import {like, getUserInfo, getSqueals} from "./utilities.ts";
 const token = localStorage.getItem('token');
 const pleaseLogin = ref("Si prega di fare Login prima di procedere")
 const showSnackbar = ref(false)
+const avatar = ref()
 let likeColor = function getLikeColor(squealId: string) {
   if (token)
-    return User.value.hasLiked.includes(squealId) ? 'red' : '';
+    return User.value.user.hasLiked.includes(squealId) ? 'red' : '';
   else return ''
 }
 
@@ -44,6 +45,7 @@ const User = ref()
 onMounted(async () => {
   User.value = await getUserInfo()
   Squeals.value = await getSqueals()
+  avatar.value = `http://localhost:3000/social/get_avatar?image=${User.value.user.image}`
 
 })
 </script>
@@ -51,18 +53,17 @@ onMounted(async () => {
 <template>
   {{ message1 }}
   <v-layout>
-    <v-sheet rounded width="70vw">
+<!--    <v-sheet rounded width="80vw">-->
       <v-list :items="Squeals" on-load="getSqueals">
         <template v-for="(squeal) in Squeals">
           <v-card
               style="padding-bottom: 2rem"
               class="mx-auto"
-              max-width="50rem"
               :title=squeal.username
               align="left"
           >
             <template v-slot:prepend>
-              <v-avatar image="https://picsum.photos/200/300"></v-avatar>
+              <v-avatar :image=avatar></v-avatar>
             </template>
             <router-link :to="{name: 'squeal', params: { id: squeal._id}}">
               <v-card :text=squeal.body>
@@ -76,7 +77,7 @@ onMounted(async () => {
                         :color="likeColor(squeal._id)">
 
                 </v-icon>
-                <span class="subheading me-2">{{ squeal.reaction.like }}</span>
+<!--                <span class="subheading me-2">{{ squeal.reaction.like }}</span>-->
                 <span class="me-1">·</span>
                 <v-icon class="me-1" icon="mdi-share-variant"></v-icon>
                 <span class="subheading">45</span>
@@ -85,7 +86,7 @@ onMounted(async () => {
           </v-card>
         </template>
       </v-list>
-    </v-sheet>
+<!--    </v-sheet>-->
 
     <v-btn
         class="absolute-right-bottom"
@@ -102,11 +103,10 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-/* 添加样式以固定按钮位置 */
 .absolute-right-bottom {
   position: fixed;
-  bottom: 10vw; /* 距离底部的距离 */
-  right: 10vw; /* 距离右侧的距离 */
+  bottom: 10%; /* 距离底部的距离 */
+  right: 10%; /* 距离右侧的距离 */
 }
 
 .button-container {

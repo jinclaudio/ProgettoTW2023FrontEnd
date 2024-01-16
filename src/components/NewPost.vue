@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed, onMounted, ref} from 'vue'
-import axios from "axios";
+import {apiClient} from "./utilities.ts";
 import { getUserInfo, useCredit, getChannels } from "./utilities.ts";
 
 const text = ref('');
@@ -22,7 +22,7 @@ async function postASqueal() {
   formData.append('destinatari', dest.value);
   formData.append('channel', channelSelected.value);
   if (image.value !== undefined){  formData.append('image', image.value[0]);}
-  await axios.post('http://127.0.0.1:3000/social/squeal_post', formData,
+  await apiClient.post('/social/squeal_post', formData,
       {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -45,7 +45,7 @@ async function postASqueal() {
 async function fetchCreditAvailable() {
   try {
     const userInfo = await getUserInfo();
-    const creditAvailable = userInfo.creditAvailable;
+    const creditAvailable = userInfo.user.creditAvailable;
     console.log('Credit Available:', creditAvailable);
 
     return creditAvailable

@@ -3,7 +3,7 @@
   <v-container>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="12" lg-="4">
-        <v-card width="60vw">
+        <v-card width="80vw" max-width="50rem">
           <v-card-title class="justify-center">
             <h2>Resgistrazione</h2>
           </v-card-title>
@@ -35,7 +35,7 @@
 <script setup lang="ts">
 
 import {ref} from 'vue';
-import axios from 'axios';
+import {apiClient} from "./utilities.ts";
 // import {useRouter} from 'vue-router';
 
 
@@ -45,7 +45,7 @@ const password = ref('');
 
 async function register() {
   try {
-    axios.post('http://localhost:3000/social/register', {
+    await apiClient.post('/social/register', {
       username: username.value,
       password: password.value,
       creditInit: 1000

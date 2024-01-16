@@ -36,7 +36,8 @@ onMounted(async () => {
       >
         <v-card
             class="mx-auto"
-            width="30rem"
+            width="80vw"
+            max-width="50rem"
         >
           <v-img
               class="align-end text-white"

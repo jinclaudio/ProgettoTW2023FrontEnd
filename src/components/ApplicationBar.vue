@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import axios from "axios";
-// import { logout } from "./utilities.ts";
+import {apiClient} from "./utilities.ts";
+import {logout} from "./utilities.ts";
 
 const drawer = ref(true)
 const userinfo = ref()
+const avatar = ref()
 // const username = ref()
 
 
@@ -17,7 +18,7 @@ async function getUserInfo() {
       console.log('Utente non oggato！');
       return;
     }
-    const response = await axios.get('http://localhost:3000/social/user_detail', {
+    const response = await apiClient.get('social/user_detail', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -28,10 +29,12 @@ async function getUserInfo() {
   }
 }
 
-getUserInfo()
+
 onMounted(async () => {
   userinfo.value = await getUserInfo()
   console.log(userinfo.value)
+  avatar.value = `http://localhost:3000/social/get_avatar?image=${userinfo.value.image}`
+  console.log(avatar.value)
 
 })
 </script>
@@ -39,22 +42,19 @@ onMounted(async () => {
 <template>
 
 
-      <v-app-bar
-          scroll-behavior="elevate"
-          density="compact"
-          prominent
-      >
-        <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+  <v-app-bar
+      scroll-behavior="elevate"
+      density="compact"
+      prominent
+  >
+    <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
-        <v-toolbar-title>Squealer</v-toolbar-title>
+    <v-toolbar-title>Squealer</v-toolbar-title>
 
-<!--        <v-spacer></v-spacer>-->
+    <!--        <v-spacer></v-spacer>-->
 
-        <v-btn variant="text" icon="mdi-magnify"></v-btn>
-      </v-app-bar>
-
-
-
+    <v-btn variant="text" icon="mdi-magnify"></v-btn>
+  </v-app-bar>
 
 
   <v-navigation-drawer
@@ -63,8 +63,10 @@ onMounted(async () => {
       location="left"
   >
     <v-list-item
-        prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg"
-        :title=userinfo.username
+        :prepend-avatar=avatar
+
+
+    :title=userinfo.username
         nav=""
     >
     </v-list-item>
@@ -75,7 +77,7 @@ onMounted(async () => {
     </v-list>
 
   </v-navigation-drawer>
-<!--  {{ userinfo }}-->
+  <!--  {{ userinfo }}-->
 </template>
 
 <style scoped>
