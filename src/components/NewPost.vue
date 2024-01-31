@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import {computed, onMounted, ref} from 'vue'
-import {apiClient} from "./utilities.ts";
-import { getUserInfo, useCredit, getChannels } from "./utilities.ts";
+import {computed, onMounted, ref} from 'vue';
+import {fetchCreditAvailable, getChannels, apiClient, useCredit} from "./utilities.ts";
 
 const text = ref('');
 const credit = ref()
@@ -15,13 +14,14 @@ const errore = ref()
 const success = ref()
 const channelList = ref()
 const channelSelected = ref()
+
 async function postASqueal() {
   const token = localStorage.getItem('token');
   const formData = new FormData();
   formData.append('body', text.value);
   formData.append('destinatari', dest.value);
   formData.append('channel', channelSelected.value);
-  if (image.value !== undefined){  formData.append('image', image.value[0]);}
+  if (image.value !== undefined){  formData.append('image', image.value[0])}
   await apiClient.post('/social/squeal_post', formData,
       {
         headers: {
@@ -31,7 +31,6 @@ async function postASqueal() {
       })
       .then(response => {
         success.value = true
-        useCredit(-creditUsage.value);
         console.log("Response: ", response.data)
       })
       .catch(error => {
@@ -42,17 +41,6 @@ async function postASqueal() {
 }
 
 
-async function fetchCreditAvailable() {
-  try {
-    const userInfo = await getUserInfo();
-    const creditAvailable = userInfo.user.creditAvailable;
-    console.log('Credit Available:', creditAvailable);
-
-    return creditAvailable
-  } catch (error) {
-    console.error('An error occurred:', error);
-  }
-}
 
 onMounted(async () => {
   credit.value = await fetchCreditAvailable();

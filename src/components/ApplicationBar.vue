@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 import {apiClient} from "./utilities.ts";
-import {logout} from "./utilities.ts";
+// import {logout} from "./utilities.ts";
 
 const drawer = ref(true)
 const userinfo = ref()
@@ -33,7 +33,7 @@ async function getUserInfo() {
 onMounted(async () => {
   userinfo.value = await getUserInfo()
   console.log(userinfo.value)
-  avatar.value = `http://localhost:3000/social/get_avatar?image=${userinfo.value.image}`
+  avatar.value = `http://localhost:3000/social/get_avatar?user=${userinfo.value._id}`
   console.log(avatar.value)
 
 })
@@ -53,7 +53,7 @@ onMounted(async () => {
 
     <!--        <v-spacer></v-spacer>-->
 
-    <v-btn variant="text" icon="mdi-magnify"></v-btn>
+    <v-btn to="/" variant="text" icon="mdi-magnify"></v-btn>
   </v-app-bar>
 
 

@@ -8,6 +8,7 @@ export const apiClient = axios.create({
 
 });
 
+
 export async function getUserInfo() {
     let data
     try {
@@ -28,10 +29,23 @@ export async function getUserInfo() {
     }
 }
 
+
+export async function fetchCreditAvailable() {
+    try {
+        const userInfo = await getUserInfo();
+        const creditAvailable = userInfo.user.creditAvailable;
+        console.log('Credit Available:', creditAvailable);
+
+        return creditAvailable
+    } catch (error) {
+        console.error('An error occurred:', error);
+    }
+}
+
 export async function useCredit(credit: number) {
     try {
         const token = localStorage.getItem('token');
-        const res = await apiClient.patch('http://localhost:3000/social/updateCredit',
+        const res = await apiClient.patch('/social/updateCredit',
             {value: credit}, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -47,7 +61,7 @@ export async function useCredit(credit: number) {
 export async function topUp(amount: number) {
     try {
         const token = localStorage.getItem('token');
-        const res = await apiClient.patch('http://localhost:3000/social/updateCredit',
+        const res = await apiClient.patch('/social/updateCredit',
             {
                 value: amount,
 
@@ -81,7 +95,7 @@ export async function logout() {
 export function checkLoginStatus() {
     const token = localStorage.getItem('token');
     if (token) {
-        apiClient.get('http://localhost:3000/social/user_detail', {
+        apiClient.get('/social/user_detail', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -115,7 +129,7 @@ export async function getSqueals() {
 export async function getChannels(typeOfChannel: string) {
     try {
         const token = localStorage.getItem('token');
-        const response = await apiClient.get(`social/allChannel${typeOfChannel}`, {
+        const response = await apiClient.get(`/social/allChannel${typeOfChannel}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -128,7 +142,7 @@ export async function getChannels(typeOfChannel: string) {
 
 export async function getSingleSquealInfo(id: string) {
     try {
-        const response = await apiClient.get("http://localhost:3000/social/singleSqueal", {
+        const response = await apiClient.get("/social/singleSqueal", {
             params: {id: id}
         })
         return response.data
@@ -141,7 +155,7 @@ export async function getSingleSquealInfo(id: string) {
 export async function like(obj_id: string) {
     try {
         const token = localStorage.getItem('token');
-        const res = await apiClient.patch('http://localhost:3000/social/likeSqueal',
+        const res = await apiClient.patch('/social/likeSqueal',
             {
                 id: obj_id,
 
@@ -162,7 +176,7 @@ export async function like(obj_id: string) {
 
 export async function squealView(squealID: string) {
     try {
-        const res = await apiClient.post('http://localhost:3000/social/update_view',
+        const res = await apiClient.post('/social/update_view',
             {
                 id: squealID,
             })
@@ -176,7 +190,7 @@ export async function squealView(squealID: string) {
 
 export async function squealViewCount(squealID: string) {
     try {
-        const res = await apiClient.get('http://localhost:3000/social/get_views',
+        const res = await apiClient.get('/social/get_views',
             {
                 params: {id: squealID},
             })
@@ -185,5 +199,100 @@ export async function squealViewCount(squealID: string) {
         return res.data
     } catch (error) {
 
+    }
+}
+
+export async function MsgAutmatic_currentLocation() {
+    const token = localStorage.getItem('token');
+    let currentPosition
+    if (navigator.geolocation) {
+        setInterval(() => {
+
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    currentPosition = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    };
+                    const data = new FormData()
+                    let newDate = new Date()
+                    data.append('longitude', String(currentPosition.longitude) )
+                    data.append('latitude', String(currentPosition.latitude))
+                    data.append('body', `Ciao a tutti, ho publiccato la mia nuova posizione in data ${newDate}`);
+                    // data.append('channel', channelSelected.value);
+                    data.append('automaticMessage', String(true));
+                    console.log(data)
+
+                    apiClient.post('/social/squeal_post/', data, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            'Authorization': `Bearer ${token}`
+                        }
+                    })
+                        .then(response => {
+                            console.log("Response: ", response.data)
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                        })
+                },
+                (error) => {
+                    console.log('Error getting device location:', error)
+                }
+            )
+        }, 10000)
+    } else {
+        console.log("Geolocation is not supported by this browser")
+    }
+
+}
+
+export async function reply(body: any){
+
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+    formData.append('text', body.value.text);
+    formData.append('replyTo', body.value.replyTo);
+    formData.append('id', body.value.id);
+    await apiClient.post('/social/squeal_reply', formData,
+        {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            console.log("Response: ", response.data)
+
+            // window.location.reload()
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        })
+
+}
+
+export async function reply_get(squealID: string){
+    try{
+        const res = await apiClient.get('/social/reply_get/', {
+            params: { id: squealID },
+
+        })
+        return res.data
+    } catch (error){
+        console.log(error)
+    }
+
+}
+
+export async function get_avatar(userID: string){
+    try {
+        const res = await apiClient.get('/social/get_avatar',{
+            params: { user: userID }
+        })
+        return res
+
+    }catch (error){
+        console.log(error)
     }
 }

@@ -15,17 +15,18 @@ let likeColor = function getLikeColor(squealId: string) {
   else return ''
 }
 
-function toggleLike(squeal: any) {
+function toggleLike(squeal:any) {
   if (token) {
     like(squeal._id)
-    const color = likeColor(squeal._id)
-    if (color !== 'red') {
+    if (User.value.user.hasLiked.includes(squeal._id)) {
+      return showSnackbar.value = true;
+    } else {
       squeal.reaction.like++
+      likeColor(squeal._idd)
+
+
+
     }
-    User.value.hasLiked.push(squeal._id)
-    console.log(User.value.hasLiked)
-  } else {
-    showSnackbar.value = true
   }
 
 }
@@ -43,14 +44,18 @@ const Squeals = ref()
 
 const User = ref()
 onMounted(async () => {
-  User.value = await getUserInfo()
-  Squeals.value = await getSqueals()
-  avatar.value = `http://localhost:3000/social/get_avatar?image=${User.value.user.image}`
+  User.value =  await getUserInfo()
 
+  Squeals.value = await getSqueals()
+  avatar.value = `http://localhost:3000/social/get_avatar?user=${User.value.user._id}`
+
+  console.log(avatar.value)
 })
 </script>
 
 <template>
+
+
   {{ message1 }}
   <v-layout>
 <!--    <v-sheet rounded width="80vw">-->
@@ -71,16 +76,14 @@ onMounted(async () => {
             </router-link>
             <template v-slot:append>
               <div class="justify-self-end">
-                <v-icon class="me-1"
+                <v-icon
                         @click="toggleLike(squeal) "
                         icon="mdi-heart"
                         :color="likeColor(squeal._id)">
 
                 </v-icon>
-<!--                <span class="subheading me-2">{{ squeal.reaction.like }}</span>-->
-                <span class="me-1">·</span>
-                <v-icon class="me-1" icon="mdi-share-variant"></v-icon>
-                <span class="subheading">45</span>
+                <span class="subheading me-2">{{ squeal.reaction.like }}</span>
+                <span class="me-1"></span>
               </div>
             </template>
           </v-card>
