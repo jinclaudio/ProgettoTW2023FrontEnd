@@ -13,9 +13,9 @@
 import BottomNav from "./components/BottomNav.vue";
 import ApplicationBar from "./components/ApplicationBar.vue";
 import {onMounted} from "vue";
-import {MsgAutomatic_currentLocation} from "./components/utilities.ts";
+import {MsgAutmatic_currentLocation} from "./components/utilities.ts";
 onMounted(()=>{
-  // MsgAutomatic_currentLocation()
+  MsgAutmatic_currentLocation()
 })
 </script>
 <style scoped>

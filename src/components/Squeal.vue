@@ -2,7 +2,7 @@
 
 import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
-import {getSingleSquealInfo, squealView, squealViewCount, getUserInfo, reply_get, like} from "./utilities.ts";
+import {getSingleSquealInfo, squealView, squealViewCount, getUserInfo, reply_get} from "./utilities.ts";
 
 const {params} = useRoute()
 
@@ -14,26 +14,9 @@ const image = ref()
 const avatar = ref()
 const viewedCount = ref()
 const replies = ref()
-const token = localStorage.getItem('token');
+// const token = localStorage.getItem('token');
 
-let likeColor = function getLikeColor(squealId: string) {
-  if (token)
-    return User.value.user.hasLiked.includes(squealId) ? 'red' : '';
-  else return ''
-}
 
-function toggleLike(squeal:any) {
-  if (token) {
-    like(squeal._id)
-    if (User.value.user.hasLiked.includes(squeal._id)) {
-      return showSnackbar.value = true;
-    } else {
-      squeal.reaction.like++
-      likeColor(squeal._idd)
-    }
-  }
-
-}
 onMounted(async () => {
   await squealView(String(SquealID.value));
   data.value = await getSingleSquealInfo(String(SquealID.value))
@@ -86,6 +69,8 @@ onMounted(async () => {
             variant="plain"
         >
         </v-btn>
+
+
       </v-card-actions>
     </v-card>
   </v-card>

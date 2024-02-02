@@ -7,13 +7,17 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(),
+  plugins: [
+    vue(),
     AutoImport({
       resolvers: [ElementPlusResolver()],
     }),
-      Components({
-        resolvers:[ElementPlusResolver()],
-      })
+    // Components should be a separate object
+    Components({
+      resolvers: [ElementPlusResolver()],
+    }),
   ],
-
-})
+  compilerOptions: {
+    allowJs: true,
+  },
+});

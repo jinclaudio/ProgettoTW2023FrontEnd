@@ -67,12 +67,12 @@ onMounted(async () => {
 
 
     :title=userinfo.username
-        nav=""
+        nav
     >
     </v-list-item>
 
 
-    <v-list density="compact" nav="">
+    <v-list density="compact" nav>
       <v-list-item prepend-icon="mdi-account" title="My Account" value="account" to="/user_detail"></v-list-item>
     </v-list>
 

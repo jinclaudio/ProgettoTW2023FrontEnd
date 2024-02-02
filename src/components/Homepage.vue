@@ -3,19 +3,37 @@
 // import Squeal from "./Squeal.vue";
 
 import {onMounted, ref} from "vue";
-import {like, getUserInfo, getSqueals} from "./utilities.ts";
+import {like, getUserInfo, getSqueals, dislike } from "./utilities.ts";
 
 const token = localStorage.getItem('token');
-const pleaseLogin = ref("Si prega di fare Login prima di procedere")
 const showSnackbar = ref(false)
+const SnackbarText = ref()
 const avatar = ref()
+const limit = 10
+let skip = 0
+
 let likeColor = function getLikeColor(squealId: string) {
   if (token)
     return User.value.user.hasLiked.includes(squealId) ? 'red' : '';
-  else return ''
+  else return
 }
 
-function toggleLike(squeal:any) {
+let reactionIcon = (squeal: any) => {
+  if (squeal.reaction.like >= squeal.reaction.CM) {
+    return 'mdi-fire'
+  } else if (squeal.reaction.dislike >= squeal.reaction.CM) {
+    return 'mdi-thumb-down'
+  }else if (squeal.reaction.like >= squeal.reaction.CM && squeal.reaction.dislike >= squeal.reaction.CM) {
+  return "mdi-alien-outline"
+  }
+}
+
+let dislikeColor = function getDislikeColor(squealId: string) {
+  if (token)
+    return User.value.user.hasDisliked.includes(squealId) ? 'blue' : '';
+  else return
+}
+function toggleLike(squeal: any) {
   if (token) {
     like(squeal._id)
     if (User.value.user.hasLiked.includes(squeal._id)) {
@@ -23,15 +41,32 @@ function toggleLike(squeal:any) {
     } else {
       squeal.reaction.like++
       likeColor(squeal._idd)
-
-
-
     }
+  } else {
+    SnackbarText.value = 'Si prega di fare Login prima di procedere'
+    showSnackbar.value = true
   }
+}
 
+function toggleDislike(squeal: any) {
+  if (token) {
+    dislike(squeal._id)
+    if (User.value.user.hasDisliked.includes(squeal._id)) {
+      SnackbarText.value = 'Hai già cliccato.'
+      showSnackbar.value = true
+      return showSnackbar.value = true;
+    } else {
+      dislike(squeal._id)
+      window.location.reload()
+    }
+  } else{
+    SnackbarText.value = 'Si prega di fare Login prima di procedere'
+    showSnackbar.value = true
+  }
 }
 
 import io from 'socket.io-client';
+
 const socket = io('http://localhost:3000')
 const message1 = ref('')
 
@@ -40,13 +75,24 @@ socket.on('serverMessage', (message) => {
   console.log(message1.value)
 });
 
-const Squeals = ref()
+async function nextPage() {
+  skip += limit;
+  Squeals.value = await getSqueals(limit, skip)
 
+}
+
+async function prevPage() {
+  skip -= limit;
+  Squeals.value = await getSqueals(limit, skip)
+
+}
+
+
+const Squeals = ref()
 const User = ref()
 onMounted(async () => {
-  User.value =  await getUserInfo()
-
-  Squeals.value = await getSqueals()
+  User.value = await getUserInfo()
+  Squeals.value = await getSqueals(limit, skip)
   avatar.value = `http://localhost:3000/social/get_avatar?user=${User.value.user._id}`
 
   console.log(avatar.value)
@@ -58,38 +104,54 @@ onMounted(async () => {
 
   {{ message1 }}
   <v-layout>
-<!--    <v-sheet rounded width="80vw">-->
-      <v-list :items="Squeals" on-load="getSqueals">
-        <template v-for="(squeal) in Squeals">
-          <v-card
-              style="padding-bottom: 2rem"
-              class="mx-auto"
-              :title=squeal.username
-              align="left"
-          >
-            <template v-slot:prepend>
-              <v-avatar :image=avatar></v-avatar>
-            </template>
-            <router-link :to="{name: 'squeal', params: { id: squeal._id}}">
-              <v-card :text=squeal.body>
-              </v-card>
-            </router-link>
-            <template v-slot:append>
-              <div class="justify-self-end">
-                <v-icon
-                        @click="toggleLike(squeal) "
-                        icon="mdi-heart"
-                        :color="likeColor(squeal._id)">
+    <!--    <v-sheet rounded width="80vw">-->
+    <v-list :items="Squeals">
+      <template v-for="(squeal) in Squeals">
+        <v-card
+            style="padding-bottom: 2rem"
+            class="mx-auto"
+            width="80vw"
+            :title=squeal.username
+            align="left"
+        >
+          <template v-slot:prepend>
+            <v-avatar :image=avatar></v-avatar>
+          </template>
+          <router-link :to="{name: 'squeal', params: { id: squeal._id}}">
+            <v-card :text=squeal.body>
+            </v-card>
+          </router-link>
+          <template v-slot:append>
+            <div class="justify-self-end">
+              <v-icon
+                  @click="toggleLike(squeal) "
+                  icon="mdi-heart"
+                  :color="likeColor(squeal._id)">
 
-                </v-icon>
-                <span class="subheading me-2">{{ squeal.reaction.like }}</span>
-                <span class="me-1"></span>
-              </div>
-            </template>
-          </v-card>
-        </template>
-      </v-list>
-<!--    </v-sheet>-->
+              </v-icon>
+
+
+              <span class="subheading me-2">{{ squeal.reaction.like }}</span>
+              <v-icon
+                  @click="toggleDislike(squeal) "
+                  icon="mdi-thumb-down"
+                  :color="dislikeColor(squeal._id)">
+
+              </v-icon>
+              <span class="me-1">asd</span>
+              <v-icon
+                  :icon="reactionIcon(squeal)"
+              ></v-icon>
+            </div>
+          </template>
+          <v-spacer></v-spacer>
+        </v-card>
+      </template>
+      <v-btn @click="prevPage">prev</v-btn>
+      <v-btn @click="nextPage">next</v-btn>
+
+    </v-list>
+    <!--    </v-sheet>-->
 
     <v-btn
         class="absolute-right-bottom"
@@ -101,7 +163,7 @@ onMounted(async () => {
 
   </v-layout>
   <v-snackbar :timeout="2000" color="red" rounded="pill" v-model="showSnackbar">
-    {{ pleaseLogin }}
+    {{ SnackbarText }}
   </v-snackbar>
 </template>
 

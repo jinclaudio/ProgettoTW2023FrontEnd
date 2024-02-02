@@ -111,10 +111,14 @@ export function checkLoginStatus() {
     }
 }
 
-export async function getSqueals() {
+export async function getSqueals(limit: number, skip: number) {
     try {
         const token = localStorage.getItem('token');
         const response = await apiClient.get("/social/get_all_squeals", {
+                params: {
+                    limit: limit,
+                    skip: skip
+                },
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -156,6 +160,28 @@ export async function like(obj_id: string) {
     try {
         const token = localStorage.getItem('token');
         const res = await apiClient.patch('/social/likeSqueal',
+            {
+                id: obj_id,
+
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                }
+            })
+
+        console.log(res.data)
+        return res.data
+    } catch (error) {
+        console.log(obj_id)
+        console.log(error)
+    }
+}
+
+export async function dislike(obj_id: string) {
+    try {
+        const token = localStorage.getItem('token');
+        const res = await apiClient.patch('/social/dislikeSqueal',
             {
                 id: obj_id,
 

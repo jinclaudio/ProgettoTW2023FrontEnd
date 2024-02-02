@@ -14,7 +14,6 @@ declare module '@vue/runtime-core' {
     Channels: typeof import('./src/components/Channels.vue')['default']
     Homepage: typeof import('./src/components/Homepage.vue')['default']
     Login: typeof import('./src/components/Login.vue')['default']
-    MsgAutomatic: typeof import('./src/components/MsgAutomatic.vue')['default']
     NewPost: typeof import('./src/components/NewPost.vue')['default']
     Register: typeof import('./src/components/Register.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

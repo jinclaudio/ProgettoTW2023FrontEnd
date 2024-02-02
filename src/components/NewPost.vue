@@ -21,7 +21,11 @@ async function postASqueal() {
   formData.append('body', text.value);
   formData.append('destinatari', dest.value);
   formData.append('channel', channelSelected.value);
-  if (image.value !== undefined){  formData.append('image', image.value[0])}
+  let creditUsage = text.value.length
+  if (image.value !== undefined){
+    formData.append('image', image.value[0])
+    creditUsage += 1000
+  }
   await apiClient.post('/social/squeal_post', formData,
       {
         headers: {
@@ -30,6 +34,7 @@ async function postASqueal() {
         }
       })
       .then(response => {
+        useCredit(creditUsage)
         success.value = true
         console.log("Response: ", response.data)
       })
