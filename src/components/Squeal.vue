@@ -40,42 +40,43 @@ onMounted(async () => {
 <template>
 
 
-<!--  <v-card class="mx-auto my-4" outlined >-->
-<!--    {{ data }}-->
-<!--  </v-card>-->
   <v-card
       style="padding-bottom: 2rem"
       class="mx-auto"
       align="left"
       v-if="data"
-
       :title=data.username
-
+      width="50vw"
   >
     <template v-slot:prepend>
       <v-avatar :image=avatar></v-avatar>
     </template>
-    <v-card :text=data.body>
-      <template v-slot:append>
-        <div class="justify-self-end">
 
-          <span class="me-1"></span>
-        </div>
-      </template>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn
-            icon="mdi-heart"
-            variant="plain"
-        >
-        </v-btn>
+    <v-img
+        :src=image
+        cover
+    ></v-img>
+    <div :text=data.body>
+      <!-- 这里放置原本在内层 v-card 中的内容 -->
+    </div>
+    <template v-slot:append>
+      <div class="justify-self-end">
+        <span class="me-1"></span>
+      </div>
+    </template>
 
-
-      </v-card-actions>
-    </v-card>
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn
+          icon="mdi-heart"
+          variant="plain"
+      >
+      </v-btn>
+    </v-card-actions>
   </v-card>
 
-<!--  <v-img :src=image></v-img>-->
+
+  <!--  <v-img :src=image></v-img>-->
 <!--  <v-card v-if="viewedCount">-->
 <!--    {{ viewedCount }}-->
 <!--  </v-card>-->
