@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed, onMounted, ref} from 'vue';
-import {fetchCreditAvailable, getChannels, apiClient, useCredit} from "./utilities.ts";
+import {fetchCreditAvailable, getChannels, apiClient} from "./utilities.ts";
 
 const text = ref('');
 const credit = ref()
@@ -21,10 +21,9 @@ async function postASqueal() {
   formData.append('body', text.value);
   formData.append('destinatari', dest.value);
   formData.append('channel', channelSelected.value);
-  let creditUsage = text.value.length
   if (image.value !== undefined){
     formData.append('image', image.value[0])
-    creditUsage += 1000
+    // creditUsage += 1000
   }
   await apiClient.post('/social/squeal_post', formData,
       {
@@ -34,7 +33,7 @@ async function postASqueal() {
         }
       })
       .then(response => {
-        useCredit(creditUsage)
+        // useCredit(-creditUsage)
         success.value = true
         console.log("Response: ", response.data)
       })
@@ -50,10 +49,9 @@ async function postASqueal() {
 onMounted(async () => {
   credit.value = await fetchCreditAvailable();
   channelList.value = await getChannels("P");
-  for (let i in channelList.value){
-    channelList.value[i] = channelList.value[i].name
-  }
-  console.log(channelList.value[0])
+  channelList.value = channelList.value.channelsIn
+  channelList.value = channelList.value.map( (item:any) => item.name)
+  console.log(channelList.value)
   console.log(credit.value.daily);
 
 });
@@ -76,7 +74,7 @@ console.log(credit.value)
 
             <v-text-field label="Destinatari" v-model="dest">
             </v-text-field>
-            <v-select v-if="channelList" label="Canale"
+            <v-select label="Canale"
                       v-model="channelSelected"
                       :items="channelList"
                       clearable

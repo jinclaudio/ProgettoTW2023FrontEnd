@@ -7,8 +7,6 @@ const drawer = ref(true)
 const userinfo = ref()
 const avatar = ref()
 // const username = ref()
-
-
 // let portrait: string;
 
 async function getUserInfo() {
@@ -33,7 +31,7 @@ async function getUserInfo() {
 onMounted(async () => {
   userinfo.value = await getUserInfo()
   console.log(userinfo.value)
-  avatar.value = `http://localhost:3000/social/get_avatar?user=${userinfo.value._id}`
+  // avatar.value = `http://localhost:3000/social/get_avatar?user=${userinfo.value._id}`
   console.log(avatar.value)
 
 })
@@ -53,7 +51,7 @@ onMounted(async () => {
 
     <!--        <v-spacer></v-spacer>-->
 
-    <v-btn to="/" variant="text" icon="mdi-magnify"></v-btn>
+
   </v-app-bar>
 
 

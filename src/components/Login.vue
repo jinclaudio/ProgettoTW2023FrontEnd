@@ -23,7 +23,19 @@
                   required
               ></v-text-field>
               <v-btn @click="login" @keyup.enter.native="login" class="mr-3" color="primary">Login</v-btn>
-<!--              <v-btn @click="checkLoginStatus">check</v-btn>-->
+              <v-dialog v-model="showGotoDialog" fullscreen hide-overlay>
+                <v-card>
+                  <v-card-title>Sei sicuro?</v-card-title>
+                  <v-card-text>
+                    Sicuro?
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn color="primary" @click="goToModeratore">Conferma</v-btn>
+                    <v-btn color="error" @click="() => {showGotoDialog.value = false}">取消</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+              <!--              <v-btn @click="checkLoginStatus">check</v-btn>-->
               <v-btn to="/register">Registra</v-btn>
 
             </v-form>
@@ -37,14 +49,16 @@
 
 <script setup lang="ts">
 import {ref} from 'vue';
-import { checkLoginStatus} from "./utilities.ts";
+import {checkLoginStatus} from "./utilities.ts";
 import axios from "axios";
 import {useRouter} from "vue-router";
+
 const router = useRouter()
 const username = ref('');
 const password = ref('');
 const notify = ref()
 // const messaggio = ref('');
+const showGotoDialog = ref()
 
 async function login() {
   try {
@@ -52,25 +66,41 @@ async function login() {
     const response = await axios.post('http://localhost:3000/social/login', {
       username: username.value,
       password: password.value,
+
     });
     const data = response.data;
     if (data.token) {
       localStorage.setItem('token', data.token);
 
-      console.log("Logged con successo!", data.token)
+      console.log("Logged con successo!", data.accountType)
       notify.value = "Logged con successo!"
-      await router.push({ name: 'home'})
-      window.location.reload();
+      if (data.accountType === 'mod') {
+        showGotoDialog.value = true
+        const confirmation = window.confirm('Vuoi andare sulla pagina del moderatore?');
+        if (confirmation) {
+          window.location.href = 'http://localhost:63342/mod/index.html?_ijt=nf22vifuapdo5dn05s8ugjm07q';
+        }
+      } else if (data.accountType === 'smm') {
+        const confirmation = window.confirm('Vuoi andare sulla pagina del smm?');
+        if (confirmation) {
+          window.location.href = 'http://localhost:63342/smm/index.html';
+        }
+        await router.push({name: 'home'})
+        window.location.reload();
 
-    } else {
-      console.log("Login fallito", data.error);
+      } else {
+        console.log("Login fallito", data.error);
+      }
     }
-  } catch (error) {
-    console.log("Si è verificato un errore durante il login", error);
+  } catch (error){
+    console.log(error)
   }
 }
+  function goToModeratore() {
+    window.location.href = 'http://localhost:63342/mod/index.html?_ijt=nf22vifuapdo5dn05s8ugjm07q';
+  }
 
-checkLoginStatus();
+  checkLoginStatus();
 </script>
 
 <style scoped>

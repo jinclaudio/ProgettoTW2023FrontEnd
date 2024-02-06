@@ -11,7 +11,7 @@ const value = ref(1)
       density="compact"
 
   >
-    <v-btn to="/">
+    <v-btn to="/home">
       <v-icon>mdi-home</v-icon>
 
       Home
@@ -23,10 +23,10 @@ const value = ref(1)
       Canali
     </v-btn>
 
-    <v-btn to="/register">
+    <v-btn to="/geo_squeals">
       <v-icon>mdi-map-marker</v-icon>
 
-      Nearby
+      My track
     </v-btn>
   </v-bottom-navigation>
 </template>

@@ -14,8 +14,11 @@ import BottomNav from "./components/BottomNav.vue";
 import ApplicationBar from "./components/ApplicationBar.vue";
 import {onMounted} from "vue";
 import {MsgAutmatic_currentLocation} from "./components/utilities.ts";
+import router from "./router";
 onMounted(()=>{
   MsgAutmatic_currentLocation()
+  const token = localStorage.getItem('token');
+    if (!token) router.push('/login')
 })
 </script>
 <style scoped>

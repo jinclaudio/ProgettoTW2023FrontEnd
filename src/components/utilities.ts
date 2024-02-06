@@ -115,10 +115,10 @@ export async function getSqueals(limit: number, skip: number) {
     try {
         const token = localStorage.getItem('token');
         const response = await apiClient.get("/social/get_all_squeals", {
-                params: {
-                    limit: limit,
-                    skip: skip
-                },
+            params: {
+                limit: limit,
+                skip: skip
+            },
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -133,16 +133,21 @@ export async function getSqueals(limit: number, skip: number) {
 export async function getChannels(typeOfChannel: string) {
     try {
         const token = localStorage.getItem('token');
-        const response = await apiClient.get(`/social/allChannel${typeOfChannel}`, {
+        const response = await apiClient.get(`/social/channelsUser${typeOfChannel}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
+            },
+            params: {
+                type: typeOfChannel
             }
+
         })
         return response.data
     } catch (error) {
         console.log(error)
     }
 }
+
 
 export async function getSingleSquealInfo(id: string) {
     try {
@@ -242,10 +247,10 @@ export async function MsgAutmatic_currentLocation() {
                     };
                     const data = new FormData()
                     let newDate = new Date()
-                    data.append('longitude', String(currentPosition.longitude) )
+                    data.append('longitude', String(currentPosition.longitude))
                     data.append('latitude', String(currentPosition.latitude))
                     data.append('body', `Ciao a tutti, ho publiccato la mia nuova posizione in data ${newDate}`);
-                    // data.append('channel', channelSelected.value);
+                    data.append('channel', '§geo');
                     data.append('automaticMessage', String(true));
                     console.log(data)
 
@@ -266,20 +271,20 @@ export async function MsgAutmatic_currentLocation() {
                     console.log('Error getting device location:', error)
                 }
             )
-        }, 10000)
+        }, 18000000)
     } else {
         console.log("Geolocation is not supported by this browser")
     }
 
 }
 
-export async function reply(body: any){
+export async function reply(text: string, replyTo: string, id: string) {
 
     const token = localStorage.getItem('token');
     const formData = new FormData();
-    formData.append('text', body.value.text);
-    formData.append('replyTo', body.value.replyTo);
-    formData.append('id', body.value.id);
+    formData.append('text', text);
+    formData.append('replyTo', replyTo);
+    formData.append('id', id);
     await apiClient.post('/social/squeal_reply', formData,
         {
             headers: {
@@ -298,27 +303,111 @@ export async function reply(body: any){
 
 }
 
-export async function reply_get(squealID: string){
-    try{
+export async function reply_get(squealID: string) {
+    try {
         const res = await apiClient.get('/social/reply_get/', {
-            params: { id: squealID },
+            params: {id: squealID},
 
         })
         return res.data
-    } catch (error){
+    } catch (error) {
         console.log(error)
     }
 
 }
 
-export async function get_avatar(userID: string){
+export async function get_avatar(userID: string) {
     try {
-        const res = await apiClient.get('/social/get_avatar',{
-            params: { user: userID }
+        const res = await apiClient.get('/social/get_avatar', {
+            params: {user: userID}
         })
         return res
 
-    }catch (error){
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function subscribeToChannel(channelID: string) {
+    const token = localStorage.getItem('token');
+
+    try {
+        const res = await apiClient.patch('/social/subscribeToChannel',
+            {
+                id: channelID
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+
+            })
+        return res
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function unsubscribeToChannel(channelID: string) {
+    const token = localStorage.getItem('token');
+
+    try {
+        const res = await apiClient.patch('/social/unsubscribeToChannel',
+            {
+                id: channelID
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+
+            })
+        return res
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function MyGeoSqueals() {
+    const token = localStorage.getItem('token');
+    try {
+        return await apiClient.get('/social/get_geoSqueals', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+
+            }
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function search(word: string) {
+    try {
+        const res = await apiClient.get('/social/search_squeal',
+            {
+                params: {word: word},
+            })
+
+        console.log(res.data)
+        return res.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function removeSMM() {
+    const token = localStorage.getItem('token');
+
+    try {
+        const res = await apiClient.post('/social/removeSMM',{},{
+            headers: {
+                'Authorization': `Bearer ${token}`
+
+            }
+        })
+
+        console.log(res.data)
+        return res.data
+    } catch (error) {
         console.log(error)
     }
 }

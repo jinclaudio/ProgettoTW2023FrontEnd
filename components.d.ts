@@ -14,12 +14,14 @@ declare module '@vue/runtime-core' {
     Channels: typeof import('./src/components/Channels.vue')['default']
     Homepage: typeof import('./src/components/Homepage.vue')['default']
     Login: typeof import('./src/components/Login.vue')['default']
+    MyPositions: typeof import('./src/components/MyPositions.vue')['default']
     NewPost: typeof import('./src/components/NewPost.vue')['default']
     Register: typeof import('./src/components/Register.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Search: typeof import('./src/components/Search.vue')['default']
     Squeal: typeof import('./src/components/Squeal.vue')['default']
+    SquealList: typeof import('./src/components/SquealList.vue')['default']
     UserDetails: typeof import('./src/components/UserDetails.vue')['default']
   }
 }

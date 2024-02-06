@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {apiClient, getUserInfo, topUp} from "./utilities.ts"
+import {apiClient, getUserInfo, removeSMM, topUp} from "./utilities.ts"
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 
@@ -37,13 +37,6 @@ function goToModeratore() {
 
 }
 
-function goToSMM() {
-  const confirmation = window.confirm('Vuoi andare sulla pagina del SMM?');
-  if (confirmation) {
-    window.location.href = 'http://localhost:5174/';
-  }
-
-}
 
 const rules = [
   (value: any) => {
@@ -126,7 +119,7 @@ onMounted(async () => {
 
   console.log(data.value.squeals);
   if (data.value.accountType === 'smm') {
-    goToSMM()
+    await router.push('/smm')
   }
   if (data.value.accountType === 'mod') {
     goToModeratore()
@@ -141,8 +134,12 @@ onMounted(async () => {
     <v-card-title>
       <v-avatar :image=avatar></v-avatar>
       {{ data.user.username }}
+      <br>
 
     </v-card-title>
+    <v-card-text v-if="data.user.choosedUser">Sei controllato da {{ data.user.choosedUser.username}}</v-card-text>
+        <v-btn v-if="data.user.choosedUser" @click="removeSMM">Rimuovi SMM</v-btn>
+
     <v-card>
       <v-card-text>Credit available:</v-card-text>
       <div class="text-caption">Daily: {{ data.user.creditAvailable.daily }}</div>
@@ -209,14 +206,16 @@ onMounted(async () => {
     <v-card>
       <v-card-title>Quanto vuoi ricaricare?</v-card-title>
       <v-card-text>
-        <v-text-field v-model="amount">
+        <v-text-field
+            v-model="amount"
+        >
 
         </v-text-field>
         <v-btn @click="topUp(amount)">Top Up</v-btn>
       </v-card-text>
     </v-card>
   </v-dialog>
-
+<hr>
   <v-btn @click="chooseSMM = true">Scegli SMM</v-btn>
 
   <v-dialog v-model="chooseSMM" width="500">
