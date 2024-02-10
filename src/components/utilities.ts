@@ -120,7 +120,7 @@ export async function getSqueals(limit: number, skip: number) {
                 skip: skip
             },
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': token ? `Bearer ${token}` : undefined
             }
         })
         return response.data

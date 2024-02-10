@@ -82,12 +82,18 @@ onMounted(async () =>{
               <u>Autore:</u> {{ squeal.body.author }}
             </div>
             <div>
-              <u>Publicato il:</u> {{ squeal.body.publishedAt }}
+              <u>Publicato il:</u> {{ squeal.body.publishedAt || squeal.body.date || null }}
             </div>
             <div>
               <u>Titolo:</u> {{ squeal.body.title}}
             </div>
-
+            <div v-if="squeal.body.url">
+              <u>Fonte:</u> <a  :href="squeal.body.url">{{ squeal.body.url }}</a>
+            </div>
+            <div v-else-if="squeal.body.utl">
+              <!--      <u>Fonte:</u> <a  :href="data.body.url">{{ data.body.url }}</a>-->
+              <v-img :src=squeal.body.utl></v-img>
+            </div>
           </v-card-text>
         </router-link>
         <v-img :src="`http://localhost:3000/social/get_image?image=${squeal.image}`" cover></v-img>

@@ -130,9 +130,13 @@ onMounted(async () => {
       <div>
         <u>Titolo:</u> {{ data.body.title }}
       </div>
-      <div>
-        <u>Fonte:</u> <a :href="data.body.url">{{ data.body.url }}</a>
+      <div v-if="data.body.url">
+        <u>Fonte:</u> <a  :href="data.body.url">{{ data.body.url }}</a>
       </div>
+      <div v-if="data.body.utl">
+<!--      <u>Fonte:</u> <a  :href="data.body.url">{{ data.body.url }}</a>-->
+        <v-img :src=data.body.utl></v-img>
+    </div>
     </v-card-text>
     <template v-slot:append>
       <div class="justify-self-end">
@@ -145,7 +149,7 @@ onMounted(async () => {
 
       <div class="justify-self-end">
         <v-icon
-            v-if="User"
+
             icon="mdi-heart"
             :color="getLikeColor"
             @click="toggleLike()"
@@ -154,7 +158,7 @@ onMounted(async () => {
         <span class="subheading me-2">{{ data.reaction.like }}</span>
         <v-icon
             icon="mdi-thumb-down"
-            v-if="User"
+
             :color="getdisLikeColor"
             @click="toggleDislike()"
         >

@@ -78,29 +78,33 @@ async function login() {
         showGotoDialog.value = true
         const confirmation = window.confirm('Vuoi andare sulla pagina del moderatore?');
         if (confirmation) {
-          window.location.href = 'http://localhost:63342/mod/index.html?_ijt=nf22vifuapdo5dn05s8ugjm07q';
+          window.location.href = 'http://localhost:3000/moderator/index.html';
         }
       } else if (data.accountType === 'smm') {
         const confirmation = window.confirm('Vuoi andare sulla pagina del smm?');
         if (confirmation) {
-          window.location.href = 'http://localhost:63342/smm/index.html';
+          window.location.href = 'http://localhost:3000/smm/index.html';
         }
+      } else {
         await router.push({name: 'home'})
         window.location.reload();
-
-      } else {
-        console.log("Login fallito", data.error);
       }
+
+
+    } else {
+      console.log("Login fallito", data.error);
     }
   } catch (error){
     console.log(error)
   }
-}
-  function goToModeratore() {
-    window.location.href = 'http://localhost:63342/mod/index.html?_ijt=nf22vifuapdo5dn05s8ugjm07q';
-  }
 
-  checkLoginStatus();
+}
+
+function goToModeratore() {
+  window.location.href = 'http://localhost:63342/mod/index.html?_ijt=nf22vifuapdo5dn05s8ugjm07q';
+}
+
+checkLoginStatus();
 </script>
 
 <style scoped>

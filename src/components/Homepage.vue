@@ -4,6 +4,7 @@
 
 import {computed, onMounted, ref} from "vue";
 import {like, getUserInfo, getSqueals, dislike} from "./utilities.ts";
+
 const goTo = useGoTo()
 
 const token = localStorage.getItem('token');
@@ -12,7 +13,7 @@ const SnackbarText = ref()
 const avatar = ref()
 const openSearch = ref(false)
 
-const limit = 10
+const limit = 20
 let skip = 0
 const image = ref()
 const getLikeColor = computed(() => (squealId: string) => {
@@ -32,7 +33,7 @@ let reactionIcon = (squeal: any) => {
   }
 }
 
-const getdisLikeColor = computed(()=> (squealId: string) => {
+const getdisLikeColor = computed(() => (squealId: string) => {
   if (token && User.value.user.hasDisliked.includes(squealId)) {
     return 'blue';
   }
@@ -59,7 +60,7 @@ function toggleLike(squeal: any) {
 function toggleDislike(squeal: any) {
   if (token) {
     dislike(squeal._id)
-    if (User.value.user.hasDisliked.includes(squeal._id) ){
+    if (User.value.user.hasDisliked.includes(squeal._id)) {
       SnackbarText.value = "Hai già pi"
       return showSnackbar.value = true;
     } else {
@@ -70,22 +71,16 @@ function toggleDislike(squeal: any) {
 
 }
 
-import io from 'socket.io-client';
 import {useGoTo} from "vuetify";
 import Search from "./Search.vue";
 
-const socket = io('http://localhost:3000')
-const message1 = ref('')
 const searchResults = ref();
 
-const handleSearchCompleted = (data:any) => {
+const handleSearchCompleted = (data: any) => {
   searchResults.value = data;
   Squeals.value = data.squealsMatch
 }
-socket.on('serverMessage', (message) => {
-  message1.value = message;
-  console.log(message1.value)
-});
+
 
 async function nextPage() {
   skip += limit;
@@ -109,7 +104,7 @@ const Squeals = ref()
 const User = ref()
 onMounted(async () => {
   User.value = await getUserInfo()
-  Squeals.value = await getSqueals(limit, skip)
+  Squeals.value = await getSqueals(limit, 20)
   avatar.value = `http://localhost:3000/social/get_avatar?user=${User.value.user._id}`
   if (Squeals.value.image) {
     image.value = `http://localhost:3000/social/get_image?image=${Squeals.value.image}`
@@ -146,15 +141,15 @@ onMounted(async () => {
                 <u>Autore:</u> {{ squeal.body.author }}
               </div>
               <div>
-                <u>Publicato il:</u> {{ squeal.body.publishedAt || squeal.body.date }}
+                <u>Publicato il:</u> {{ squeal.body.publishedAt || squeal.body.date || null }}
               </div>
               <div>
                 <u>Titolo:</u> {{ squeal.body.title }}
               </div>
-              <!--                <div>-->
-              <!--                  <u>Fonte:</u> {{ squeal.body.url }}-->
-              <!--                </div>-->
-              <!-- 其他对象属性的渲染 -->
+              <div v-if="squeal.body.utl">
+                <v-img :src=squeal.body.utl></v-img>
+              </div>
+
             </v-card-text>
           </router-link>
           <v-img :src="`http://localhost:3000/social/get_image?image=${squeal.image}`" cover></v-img>
