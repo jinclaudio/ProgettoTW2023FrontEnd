@@ -4,10 +4,10 @@ import axios from "axios";
 // const router = useRouter();
 
 export const apiClient = axios.create({
-    baseURL: "http://localhost:3000/"
+    baseURL: import.meta.env.VITE_API_URL
 
 });
-
+export const apiURL = import.meta.env.VITE_API_URL
 
 export async function getUserInfo() {
     let data
@@ -271,7 +271,7 @@ export async function MsgAutmatic_currentLocation() {
                     console.log('Error getting device location:', error)
                 }
             )
-        }, 18000000)
+        }, 6000)
     } else {
         console.log("Geolocation is not supported by this browser")
     }
@@ -399,6 +399,28 @@ export async function removeSMM() {
 
     try {
         const res = await apiClient.post('/social/removeSMM',{},{
+            headers: {
+                'Authorization': `Bearer ${token}`
+
+            }
+        })
+
+        console.log(res.data)
+        return res.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function create_channel(name: string, description: string) {
+    const token = localStorage.getItem('token');
+
+    try {
+        const res = await apiClient.post('/social/createCh',{
+            name: '§'+name,
+            desc: description,
+            typeOf: 'private'
+        },{
             headers: {
                 'Authorization': `Bearer ${token}`
 

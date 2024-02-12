@@ -3,7 +3,7 @@
 // import Squeal from "./Squeal.vue";
 
 import {computed, onMounted, ref} from "vue";
-import {like, getUserInfo, getSqueals, dislike} from "./utilities.ts";
+import {like, getUserInfo, getSqueals, dislike, apiURL} from "./utilities.ts";
 
 const goTo = useGoTo()
 
@@ -105,9 +105,9 @@ const User = ref()
 onMounted(async () => {
   User.value = await getUserInfo()
   Squeals.value = await getSqueals(limit, 20)
-  avatar.value = `http://localhost:3000/social/get_avatar?user=${User.value.user._id}`
+  avatar.value = `${apiURL}/social/get_avatar?user=${User.value.user._id}`
   if (Squeals.value.image) {
-    image.value = `http://localhost:3000/social/get_image?image=${Squeals.value.image}`
+    image.value = `${apiURL}/get_image?image=${Squeals.value.image}`
   }
   console.log(avatar.value)
 })
@@ -130,7 +130,7 @@ onMounted(async () => {
             align="left"
         >
           <template v-slot:prepend>
-            <v-avatar :image="`http://localhost:3000/social/get_avatar?user=${squeal.sender._id}`"></v-avatar>
+            <v-avatar :image="`${apiURL}/social/get_avatar?user=${squeal.sender._id}`"></v-avatar>
           </template>
           <router-link :to="{name: 'squeal', params: { id: squeal._id}}">
             <v-card-text v-if="typeof squeal.body === 'string'">
@@ -152,7 +152,7 @@ onMounted(async () => {
 
             </v-card-text>
           </router-link>
-          <v-img :src="`http://localhost:3000/social/get_image?image=${squeal.image}`" cover></v-img>
+          <v-img :src="`${apiURL}/social/get_image?image=${squeal.image}`" cover></v-img>
 
           <template v-slot:append>
             <div class="justify-self-end">

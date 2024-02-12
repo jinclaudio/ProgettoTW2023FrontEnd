@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import {subscribeToChannel, unsubscribeToChannel , getChannels, getUserInfo} from "./utilities";
+import {subscribeToChannel, unsubscribeToChannel, getChannels, getUserInfo, create_channel} from "./utilities";
 import { onMounted, ref} from "vue";
 
 const channelListOfficial = ref()
 const channelListPrivate = ref()
 const tab = ref(null)
 const user = ref()
+const dialog = ref(false)
+const newChanName = ref()
+const newChanDesc = ref()
 const channelsIn = ref()
-
 
 
 onMounted(async () => {
@@ -31,6 +33,7 @@ onMounted(async () => {
       v-model="tab"
       fixed-tabs
       bg-color=""
+      height="100vh"
   >
     <v-tab value="one">Official</v-tab>
     <v-tab value="two">Private</v-tab>
@@ -85,7 +88,20 @@ onMounted(async () => {
           v-if="channelListPrivate"
           v-for="channel in channelListPrivate.channelsAll" :key="channel"
       >
+        <v-btn @click="dialog = true">Crea un nuovo canale</v-btn>
 
+        <v-dialog v-model="dialog" width="500">
+          <v-card>
+            <v-card-text>
+              <v-text-field
+                  label="nome" v-model="newChanName"
+              >
+              </v-text-field>
+              <v-text-field label="descrizione" v-model="newChanDesc"></v-text-field>
+              <v-btn @click="create_channel(newChanName.value, newChanDesc.value)">Top Up</v-btn>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
         <v-card
             class="mx-auto"
             width="80vw"

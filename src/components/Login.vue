@@ -49,8 +49,7 @@
 
 <script setup lang="ts">
 import {ref} from 'vue';
-import {checkLoginStatus} from "./utilities.ts";
-import axios from "axios";
+import {checkLoginStatus, apiClient, apiURL} from "./utilities.ts";
 import {useRouter} from "vue-router";
 
 const router = useRouter()
@@ -63,7 +62,7 @@ const showGotoDialog = ref()
 async function login() {
   try {
     // const router = useRouter();
-    const response = await axios.post('http://localhost:3000/social/login', {
+    const response = await apiClient.post('/social/login', {
       username: username.value,
       password: password.value,
 
@@ -78,12 +77,18 @@ async function login() {
         showGotoDialog.value = true
         const confirmation = window.confirm('Vuoi andare sulla pagina del moderatore?');
         if (confirmation) {
-          window.location.href = 'http://localhost:3000/moderator/index.html';
+          window.location.href = `${apiURL}/moderator/index.html`;
+        }else{
+          await router.push({name: 'home'})
+          window.location.reload();
         }
       } else if (data.accountType === 'smm') {
         const confirmation = window.confirm('Vuoi andare sulla pagina del smm?');
         if (confirmation) {
-          window.location.href = 'http://localhost:3000/smm/index.html';
+          window.location.href = `${apiURL}/smm/index.html`;
+        } else {
+          await router.push({name: 'home'})
+          window.location.reload();
         }
       } else {
         await router.push({name: 'home'})
@@ -94,14 +99,14 @@ async function login() {
     } else {
       console.log("Login fallito", data.error);
     }
-  } catch (error){
+  } catch (error) {
     console.log(error)
   }
 
 }
 
 function goToModeratore() {
-  window.location.href = 'http://localhost:63342/mod/index.html?_ijt=nf22vifuapdo5dn05s8ugjm07q';
+  window.location.href = `${apiURL}/mod/index.html?_ijt=nf22vifuapdo5dn05s8ugjm07q`;
 }
 
 checkLoginStatus();

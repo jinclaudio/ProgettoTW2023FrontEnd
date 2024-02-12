@@ -2,7 +2,7 @@
 
 import {useRoute} from "vue-router";
 import {onMounted, ref} from "vue";
-import {apiClient} from "./utilities.ts";
+import {apiClient, apiURL} from "./utilities.ts";
 
 const {params} = useRoute()
 import {useGoTo} from "vuetify";
@@ -71,7 +71,7 @@ onMounted(async () =>{
 
       >
         <template v-slot:prepend>
-          <v-avatar :image="`http://localhost:3000/social/get_avatar?user=${squeal.sender}`"></v-avatar>
+          <v-avatar :image="`${apiURL}/social/get_avatar?user=${squeal.sender}`"></v-avatar>
         </template>
         <router-link :to="{name: 'squeal', params: { id: squeal._id}}">
           <v-card-text v-if="typeof squeal.body === 'string'">
@@ -96,7 +96,7 @@ onMounted(async () =>{
             </div>
           </v-card-text>
         </router-link>
-        <v-img :src="`http://localhost:3000/social/get_image?image=${squeal.image}`" cover></v-img>
+        <v-img :src="`${apiURL}/social/get_image?image=${squeal.image}`" cover></v-img>
 
 <!--        <template v-slot:append>-->
 <!--          <div class="justify-self-end">-->

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import {apiClient} from "./utilities.ts";
+import {apiClient,apiURL} from "./utilities.ts";
 // import {logout} from "./utilities.ts";
 
 const drawer = ref(true)
@@ -31,7 +31,7 @@ async function getUserInfo() {
 onMounted(async () => {
   userinfo.value = await getUserInfo()
   console.log(userinfo.value)
-  // avatar.value = `http://localhost:3000/social/get_avatar?user=${userinfo.value._id}`
+  avatar.value = `${apiURL}/social/get_avatar?user=${userinfo.value._id}`
   console.log(avatar.value)
 
 })

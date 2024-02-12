@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {apiClient, getUserInfo, removeSMM, topUp} from "./utilities.ts"
+import {apiURL,apiClient, getUserInfo, removeSMM, topUp} from "./utilities.ts"
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 
@@ -16,6 +16,7 @@ const chooseSMM = ref(false)
 const menu = ref(false)
 const smmList = ref()
 const choosedSMM = ref()
+const goToSMMorMod = ref(false)
 async function logout() {
   const token = localStorage.getItem('token');
   if (token) {
@@ -32,12 +33,16 @@ async function logout() {
 function goToModeratore() {
   const confirmation = window.confirm('Vuoi andare sulla pagina del moderatore?');
   if (confirmation) {
-    window.location.href = 'http://localhost:63342/mod/index.html?_ijt=nf22vifuapdo5dn05s8ugjm07q';
+    window.location.href = `${apiURL}/mod/index.html`;
   }
 
 }
-
-
+function goToSMM() {
+  const confirmation = window.confirm('Vuoi andare sulla pagina del smm?');
+  if (confirmation) {
+    window.location.href = `${apiURL}/smm/index.html`;
+  }
+}
 const rules = [
   (value: any) => {
     return !value || !value.length || value[0].size < 2000000 || 'Avatar size should be less than 2 MB!'
@@ -112,16 +117,16 @@ async function changeAvatar() {
 
 onMounted(async () => {
   data.value = await getUserInfo();
-  console.log(data.value.user._id)
-  avatar.value = `http://localhost:3000/social/get_avatar?user=${data.value.user._id}`
+  console.log(data.value.user)
+  avatar.value = `${apiURL}/social/get_avatar?user=${data.value.user._id}`
   smmList.value = await getSMM_list()
   console.log(smmList.value);
 
   console.log(data.value.squeals);
-  if (data.value.accountType === 'smm') {
-    await router.push('/smm')
+  if (data.value.user.accountType === 'smm') {
+    goToSMMorMod.value = true
   }
-  if (data.value.accountType === 'mod') {
+  if (data.value.user.accountType === 'mod') {
     goToModeratore()
   }
   console.log(data.value.user.creditAvailable.daily)
@@ -129,7 +134,7 @@ onMounted(async () => {
 });
 </script>
 
-<template>
+<template v-if="data">
   <v-card width="80vw" max-width="50rem" v-if="data">
     <v-card-title>
       <v-avatar :image=avatar></v-avatar>
@@ -216,7 +221,10 @@ onMounted(async () => {
     </v-card>
   </v-dialog>
 <hr>
-  <v-btn @click="chooseSMM = true">Scegli SMM</v-btn>
+    <v-btn @click="chooseSMM = true">Scegli SMM</v-btn>
+    <v-btn v-if="goToSMMorMod" @click="goToSMM">Vai su SMM dashboard</v-btn>
+
+
 
   <v-dialog v-model="chooseSMM" width="500">
     <v-card>

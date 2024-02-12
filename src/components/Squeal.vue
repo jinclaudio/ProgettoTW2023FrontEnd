@@ -10,7 +10,8 @@ import {
   reply_get,
   like,
   dislike,
-  reply
+  reply,
+  apiURL
 } from "./utilities.ts";
 
 const {params} = useRoute()
@@ -75,7 +76,6 @@ function toggleDislike() {
 }
 
 
-
 onMounted(async () => {
   await squealView(String(SquealID.value));
   data.value = await getSingleSquealInfo(String(SquealID.value))
@@ -87,11 +87,11 @@ onMounted(async () => {
   console.log(data.value)
   replies.value = await reply_get(String(SquealID.value))
   console.log(replies.value)
-  avatar.value = `http://localhost:3000/social/get_avatar?user=${User.value.user._id}`
+  avatar.value = `${apiURL}/social/get_avatar?user=${User.value.user._id}`
   if (data.value.image !== null) {
     console.log(data.value)
     const filename = data.value.image
-    image.value = `http://localhost:3000/social/get_image?image=${filename}`
+    image.value = `${apiURL}/social/get_image?image=${filename}`
   }
 })
 
@@ -131,12 +131,12 @@ onMounted(async () => {
         <u>Titolo:</u> {{ data.body.title }}
       </div>
       <div v-if="data.body.url">
-        <u>Fonte:</u> <a  :href="data.body.url">{{ data.body.url }}</a>
+        <u>Fonte:</u> <a :href="data.body.url">{{ data.body.url }}</a>
       </div>
       <div v-if="data.body.utl">
-<!--      <u>Fonte:</u> <a  :href="data.body.url">{{ data.body.url }}</a>-->
+        <!--      <u>Fonte:</u> <a  :href="data.body.url">{{ data.body.url }}</a>-->
         <v-img :src=data.body.utl></v-img>
-    </div>
+      </div>
     </v-card-text>
     <template v-slot:append>
       <div class="justify-self-end">
@@ -188,20 +188,20 @@ onMounted(async () => {
         :key="item._id"
     >
       <template v-slot:icon>
-        <v-avatar :image="`http://localhost:3000/social/get_avatar?user=${data._id}`"></v-avatar>
+        <v-avatar :image="`${apiURL}/social/get_avatar?user=${data._id}`"></v-avatar>
 
       </template>
       <!--        {{ reply }}-->
       <v-card
           width="40vw"
       >
-        <v-card-text >
+        <v-card-text>
 
           {{ item.body }}
 
         </v-card-text>
         <v-card-text v-if="item.replyTo">
-         replay to: {{ item.replyTo}}
+          replay to: {{ item.replyTo }}
 
         </v-card-text>
 
